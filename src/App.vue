@@ -1,10 +1,19 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <NotificationContainer />
+  <NavBar />
   <router-view />
 </template>
+
+<script>
+import NotificationContainer from "@/components/NotificationContainer";
+import NavBar from "@/components/NavBar";
+export default {
+  components: {
+    NotificationContainer,
+    NavBar,
+  },
+};
+</script>
 
 <style>
 #app {

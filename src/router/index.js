@@ -1,5 +1,25 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "@/store/index.js"; // results in tight coupling between vuex and router, but sufficient for this project
 import Home from "../views/Home.vue";
+import Signup from "@/views/Signup.vue";
+import Login from "@/views/Login.vue";
+import AccountSettings from "@/views/AccountSettings.vue";
+
+const requireAuth = (to, from, next) => {
+  if (!Object.keys(store.state.user).length) {
+    return next({ name: "Login" });
+  }
+
+  next();
+};
+
+const loggedOutUsersOnly = (to, from, next) => {
+  if (Object.keys(store.state.user).length) {
+    return next({ name: "Home" });
+  }
+
+  next();
+};
 
 const routes = [
   {
@@ -15,6 +35,24 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    component: Signup,
+    beforeEnter: loggedOutUsersOnly,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    beforeEnter: loggedOutUsersOnly,
+  },
+  {
+    path: "/account-settings",
+    name: "AccountSettings",
+    component: AccountSettings,
+    beforeEnter: requireAuth,
   },
 ];
 
