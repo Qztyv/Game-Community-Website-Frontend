@@ -38,6 +38,64 @@ export default {
     }
     return response;
   },
+  async forgotPassword(forgotPasswordForm) {
+    let response;
+    try {
+      response = await apiClient.post(
+        "users/forgotPassword",
+        forgotPasswordForm
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleRequestResponseErrors(err);
+    }
+    return response;
+  },
+  async resetPassword(resetToken, resetPasswordForm) {
+    let response;
+    try {
+      response = await apiClient.patch(
+        `users/resetPassword/${resetToken}`,
+        resetPasswordForm
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleRequestResponseErrors(err);
+    }
+    return response;
+  },
+  async updateAccount(updateAccountForm) {
+    let response;
+    try {
+      response = await apiClient.patch("users/updateMe", updateAccountForm);
+      response = response.data;
+    } catch (err) {
+      response = handleRequestResponseErrors(err);
+    }
+    return response;
+  },
+  async updatePassword(updatePasswordForm) {
+    let response;
+    try {
+      response = await apiClient.patch(
+        "users/updateMyPassword",
+        updatePasswordForm
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleRequestResponseErrors(err);
+    }
+    return response;
+  },
+  async deactivateAccount() {
+    let response;
+    try {
+      response = await apiClient.delete("users/deleteMe");
+    } catch (err) {
+      response = handleRequestResponseErrors(err);
+    }
+    return response;
+  },
 };
 
 const handleRequestResponseErrors = (err) => {

@@ -22,8 +22,12 @@
       minlength="8"
       required
     />
-    <button type="submit">Signup</button>
+    <button type="submit">Log In</button>
   </form>
+  <router-link to="/signup">Dont have an account? Sign up here!</router-link>
+  <router-link to="/forgot-password"
+    >Forgot your password? Reset it here!</router-link
+  >
 </template>
 
 <script>
@@ -52,7 +56,7 @@ export default {
           type: "success",
           message: "Logged-in successfully! Redirecting...",
         });
-        store.dispatch("storeLoggedInUser", response.value.data.user);
+        store.dispatch("storeUser", response.value.data.user);
         timeout = setTimeout(() => {
           router.push({ name: "Home" });
         }, 1500);

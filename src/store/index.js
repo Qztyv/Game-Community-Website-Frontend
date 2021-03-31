@@ -20,7 +20,7 @@ const store = createStore({
         (el) => el.id !== notification.id
       );
     },
-    STORE_LOGGED_IN_USER(state, user) {
+    STORE_USER(state, user) {
       state.user = user;
     },
     LOGOUT_USER(state) {
@@ -34,8 +34,8 @@ const store = createStore({
     deleteNotification({ commit }, notification) {
       commit("DELETE_NOTIFICATION", notification);
     },
-    storeLoggedInUser({ commit }, user) {
-      commit("STORE_LOGGED_IN_USER", user);
+    storeUser({ commit }, user) {
+      commit("STORE_USER", user);
     },
     logoutUser({ commit }) {
       commit("LOGOUT_USER");
