@@ -1,11 +1,18 @@
 <template>
-  <div id="post" v-for="post in posts" :key="post.id">
-    <Post :post="post" />
+  <div class="post" v-for="post in posts" :key="post.id">
+    <router-link
+      class="post-link"
+      :to="{ name: 'PostSection', params: { id: post.id } }"
+      ><Post :post="post"
+    /></router-link>
   </div>
   <div v-if="isLoading">
     <Loader />
   </div>
   <div v-if="responseResults === 0">No more posts left in the feed!</div>
+  <div v-if="response">
+    {{ response.message }}
+  </div>
 </template>
 
 <script>
@@ -20,20 +27,21 @@ export default {
   },
   async setup() {
     const posts = ref([]);
-    const responseResults = ref(0);
+    const responseResults = ref(-1);
     const currentPage = ref(0);
     const limit = 5;
 
     const isLoading = ref(false);
 
+    const response = ref(null);
     const fetchFeed = async () => {
       currentPage.value++;
 
-      const response = await FeedService.getAllPosts(limit, currentPage.value);
-      console.log(response);
-      if (response.status === "success") {
-        posts.value = [...posts.value, ...response.data.data];
-        responseResults.value = response.results;
+      response.value = await FeedService.getAllPosts(limit, currentPage.value);
+
+      if (response.value.status === "success") {
+        posts.value = [...posts.value, ...response.value.data.data];
+        responseResults.value = response.value.results;
       }
     };
     const handleScroll = async () => {
@@ -61,9 +69,26 @@ export default {
       posts,
       isLoading,
       responseResults,
+      response,
     };
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.post-link {
+  color: #2c3e50;
+  text-decoration: none;
+}
+.post {
+  padding: 20px;
+  cursor: pointer;
+  border: 1px solid #39495c;
+  margin-bottom: 18px;
+}
+
+.post:hover {
+  transform: scale(1.01);
+  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
+}
+</style>

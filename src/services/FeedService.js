@@ -12,4 +12,24 @@ export default {
     }
     return response;
   },
+  async createPost(postForm) {
+    let response;
+    try {
+      response = await apiClient.post("posts", postForm);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async getPost(postId) {
+    let response;
+    try {
+      response = await apiClient.get(`posts/${postId}`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
 };
