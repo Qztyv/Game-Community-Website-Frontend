@@ -32,4 +32,23 @@ export default {
     }
     return response;
   },
+  async addLike(postId) {
+    let response;
+    try {
+      response = await apiClient.post(`posts/${postId}/likes`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async removeLike(likeId) {
+    let response;
+    try {
+      response = await apiClient.delete(`likes/${likeId}`);
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
 };
