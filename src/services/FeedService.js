@@ -2,10 +2,12 @@ import apiClient from "./apiClient";
 import handleServiceErrors from "./../utils/handleServiceErrors";
 
 export default {
-  async getAllPosts(limit, page) {
+  async getAllPosts(limit, page, sort) {
     let response;
     try {
-      response = await apiClient.get(`posts?limit=${limit}&page=${page}`);
+      response = await apiClient.get(
+        `posts?limit=${limit}&page=${page}&sort=${sort}`
+      );
       response = response.data;
     } catch (err) {
       response = handleServiceErrors(err);
@@ -32,10 +34,20 @@ export default {
     }
     return response;
   },
-  async addLike(postId) {
+  async createVote(postId, directionVal) {
     let response;
     try {
-      response = await apiClient.post(`posts/${postId}/likes`);
+      response = await apiClient.post(`posts/${postId}/votes`, directionVal);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async updateVote(voteId, directionVal) {
+    let response;
+    try {
+      response = await apiClient.patch(`votes/${voteId}`, directionVal);
       response = response.data;
     } catch (err) {
       response = handleServiceErrors(err);

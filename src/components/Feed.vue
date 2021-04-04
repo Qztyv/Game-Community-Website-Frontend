@@ -25,7 +25,13 @@ export default {
     Post,
     Loader,
   },
-  async setup() {
+  props: {
+    sort: {
+      type: String,
+      required: true,
+    },
+  },
+  async setup(props) {
     const posts = ref([]);
     const responseResults = ref(-1);
     const currentPage = ref(0);
@@ -37,7 +43,11 @@ export default {
     const fetchFeed = async () => {
       currentPage.value++;
 
-      response.value = await FeedService.getAllPosts(limit, currentPage.value);
+      response.value = await FeedService.getAllPosts(
+        limit,
+        currentPage.value,
+        props.sort
+      );
 
       if (response.value.status === "success") {
         posts.value = [...posts.value, ...response.value.data.data];

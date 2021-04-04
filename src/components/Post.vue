@@ -13,16 +13,31 @@
   </p>
   <h1>{{ post.postTitle }}</h1>
   <p>{{ post.postContent }}</p>
-  <button @click="hasUserLikedPost ? removeLike() : addLike()">
+  <button
+    @click="
+      direction === 1
+        ? setVoteDirection(0, direction)
+        : setVoteDirection(1, direction)
+    "
+  >
     likes: {{ likes }}
   </button>
-  <p v-if="hasUserLikedPost">You have liked this post</p>
-  <button @click="addDislike">dislikes: {{ post.dislikes }}</button>
+  <p v-if="direction === 1">You have liked this post</p>
+  <button
+    @click="
+      direction === -1
+        ? setVoteDirection(0, direction)
+        : setVoteDirection(-1, direction)
+    "
+  >
+    dislikes: {{ dislikes }}
+  </button>
+  <p v-if="direction === -1">You have disliked this post</p>
   <p>comments: {{ post.comments }}</p>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import getGeneralTimeSinceCreation from "@/utils/getTimeBetweenTwoDates.js";
 import FeedService from "@/services/FeedService.js";
 export default {
@@ -38,41 +53,82 @@ export default {
       props.post.createdAt
     );
     const likes = ref(props.post.likes);
-    const hasUserLikedPost = ref(props.post.likeList.length !== 0);
-    let newLikeId = null;
+    const dislikes = ref(props.post.dislikes);
+
+    const doesVoteAlreadyExist = ref(null);
+    const setVoteFlagIfUserIsLoggedIn = () => {
+      if (props.post.voteList) {
+        doesVoteAlreadyExist.value = ref(props.post.voteList.length !== 0);
+      }
+    };
+
+    const direction = ref(null);
+
+    onBeforeMount(() => {
+      setVoteFlagIfUserIsLoggedIn();
+      if (doesVoteAlreadyExist.value) {
+        direction.value = props.post.voteList[0].direction; // 1 - like, 0 - updated to neutral, -1 dislike
+      }
+    });
+
+    let newVoteId = null;
     const response = ref(null);
-    const addLike = async () => {
-      response.value = await FeedService.addLike(props.post.id);
+    const setVoteDirection = async (val, directionBeforeChange) => {
+      if (!doesVoteAlreadyExist.value) {
+        await createVote(val, directionBeforeChange);
+      } else {
+        await updateVote(val, directionBeforeChange);
+      }
+    };
+    const createVote = async (val, directionBeforeChange) => {
+      response.value = await FeedService.createVote(props.post.id, {
+        direction: val,
+      });
       if (response.value.status === "success") {
-        likes.value++;
-        hasUserLikedPost.value = true;
-        newLikeId = response.value.data.data.id;
-        console.log("Liked added");
-      } else {
-        console.log("Error appeared in response.message");
+        doesVoteAlreadyExist.value = true;
+        setCountersAndNewLikeId(val, directionBeforeChange, response);
       }
     };
-    const removeLike = async () => {
-      let id;
-      if (newLikeId !== null) {
-        id = newLikeId;
-      } else {
-        id = props.post.likeList[0].id;
-      }
-      response.value = await FeedService.removeLike(id);
-      if (response.value.status === 204) {
-        likes.value--;
-        hasUserLikedPost.value = false;
-        console.log("Liked removed");
+    const updateVote = async (val, directionBeforeChange) => {
+      let voteId = getVoteId();
+      response.value = await FeedService.updateVote(voteId, {
+        direction: val,
+      });
+      if (response.value.status === "success") {
+        setCountersAndNewLikeId(val, directionBeforeChange, response);
       }
     };
+
+    const setCountersAndNewLikeId = (
+      newDirection,
+      directionBeforeChange,
+      response
+    ) => {
+      if (newDirection === 1) likes.value++;
+      if (newDirection === -1) dislikes.value++;
+      if (directionBeforeChange === -1) dislikes.value--;
+      if (directionBeforeChange === 1) likes.value--;
+      direction.value = newDirection;
+      newVoteId = response.value.data.data.id;
+    };
+
+    const getVoteId = () => {
+      let voteId;
+      if (newVoteId === null) {
+        voteId = props.post.voteList[0].id;
+      } else {
+        voteId = newVoteId;
+      }
+      return voteId;
+    };
+
     return {
       generalCreatedAt,
       likes,
-      hasUserLikedPost,
+      dislikes,
+      direction,
       response,
-      addLike,
-      removeLike,
+      setVoteDirection,
     };
   },
 };

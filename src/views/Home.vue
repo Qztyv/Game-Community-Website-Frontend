@@ -27,10 +27,14 @@
       </form>
     </div>
     <div id="home-feed">
+      <p>Sorting by: {{ currentSort }}</p>
+      <button @click="sortByNewest">Newest First</button>
+      <button @click="sortByHighestLikePercentage">Like Percentage</button>
+      <button @click="sortByMostLikes">Most Likes</button>
       <div>
         <Suspense>
           <template #default>
-            <Feed />
+            <Feed :sort="sort" :key="sortId" />
           </template>
           <template #fallback>
             <Loader />
@@ -77,12 +81,37 @@ export default {
       }
     };
 
+    const sortId = ref(0);
+    const sort = ref("-createdAt");
+    const currentSort = ref("Newest");
+    const sortByNewest = () => {
+      sort.value = "-createdAt";
+      sortId.value++;
+      currentSort.value = "Newest";
+    };
+    const sortByHighestLikePercentage = () => {
+      sort.value = "-likePercentage";
+      sortId.value++;
+      currentSort.value = "Highest Like Percentage";
+    };
+
+    const sortByMostLikes = () => {
+      sort.value = "-likes";
+      sortId.value++;
+      currentSort.value = "Most Likes";
+    };
     return {
       user,
       postTitle,
       postContent,
       addPost,
       response,
+      sortId,
+      sort,
+      currentSort,
+      sortByNewest,
+      sortByHighestLikePercentage,
+      sortByMostLikes,
     };
   },
 };
