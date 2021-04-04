@@ -55,10 +55,12 @@ export default {
     const likes = ref(props.post.likes);
     const dislikes = ref(props.post.dislikes);
 
-    const doesVoteAlreadyExist = ref(null);
+    let doesVoteAlreadyExist = null;
     const setVoteFlagIfUserIsLoggedIn = () => {
+      // Users that are logged in have another property called voteList, and it contains their vote (1 element) if they voted
+      // if they have not voted, it is an empty array.
       if (props.post.voteList) {
-        doesVoteAlreadyExist.value = ref(props.post.voteList.length !== 0);
+        doesVoteAlreadyExist = props.post.voteList.length !== 0;
       }
     };
 
@@ -66,7 +68,7 @@ export default {
 
     onBeforeMount(() => {
       setVoteFlagIfUserIsLoggedIn();
-      if (doesVoteAlreadyExist.value) {
+      if (doesVoteAlreadyExist) {
         direction.value = props.post.voteList[0].direction; // 1 - like, 0 - updated to neutral, -1 dislike
       }
     });
@@ -74,9 +76,12 @@ export default {
     let newVoteId = null;
     const response = ref(null);
     const setVoteDirection = async (val, directionBeforeChange) => {
-      if (!doesVoteAlreadyExist.value) {
+      if (!doesVoteAlreadyExist) {
+        // logged in users who have never voted on this post before fall here. Also logged out users who try to create
+        // a vote by liking or disliking will be sent here - they will fail authentication and be redirected to login
         await createVote(val, directionBeforeChange);
       } else {
+        // if a vote already exists on the post (matching user id and post id), users fall into here
         await updateVote(val, directionBeforeChange);
       }
     };
@@ -85,7 +90,7 @@ export default {
         direction: val,
       });
       if (response.value.status === "success") {
-        doesVoteAlreadyExist.value = true;
+        doesVoteAlreadyExist = true;
         setCountersAndNewLikeId(val, directionBeforeChange, response);
       }
     };
