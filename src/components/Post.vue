@@ -5,7 +5,7 @@
   <p>
     Posted by
     <router-link
-      :to="{ name: 'UserProfile', params: { userId: post.user.id } }"
+      :to="{ name: 'UserProfile', params: { userId: post.user._id } }"
     >
       {{ post.user.name }}
     </router-link>

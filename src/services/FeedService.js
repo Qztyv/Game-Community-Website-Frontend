@@ -54,10 +54,23 @@ export default {
     }
     return response;
   },
-  async removeLike(likeId) {
+  async getAllCommentsOnPost(postId, limit, page) {
     let response;
     try {
-      response = await apiClient.delete(`likes/${likeId}`);
+      response = await apiClient.get(
+        `/posts/${postId}/comments?limit=${limit}&page=${page}`
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async addCommentOnPost(postId, commentForm) {
+    let response;
+    try {
+      response = await apiClient.post(`/posts/${postId}/comments`, commentForm);
+      response = response.data;
     } catch (err) {
       response = handleServiceErrors(err);
     }
