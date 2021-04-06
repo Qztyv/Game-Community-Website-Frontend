@@ -99,6 +99,21 @@ const routes = [
     name: "UserProfile",
     component: UserProfile,
     props: true,
+    children: [
+      {
+        path: "posts",
+        name: "UserPosts",
+        component: Home,
+      },
+      {
+        path: ":comments",
+        component: Profile,
+      },
+      {
+        path: "",
+        component: Home,
+      },
+    ],
   },
   {
     path: "/:pathMatch(.*)*",

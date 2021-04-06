@@ -82,4 +82,14 @@ export default {
     }
     return response;
   },
+  async getUser(userId) {
+    let response;
+    try {
+      response = await apiClient.get(`/users/${userId}`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
 };

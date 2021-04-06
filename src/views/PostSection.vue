@@ -97,7 +97,7 @@ export default {
 
     const comment = ref(null);
     const commentResponse = ref(null);
-    const newComment = ref({});
+    const newComment = ref({}); // reactivity - when new comment is added the child component will detect prop change via watch()
     const addComment = async () => {
       commentResponse.value = await FeedService.addCommentOnPost(props.id, {
         content: comment.value,
