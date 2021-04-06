@@ -1,18 +1,27 @@
 <template>
-  <p>
-    <router-link
-      :to="{ name: 'UserProfile', params: { userId: comment.user._id } }"
-    >
-      {{ comment.user.name }}
-    </router-link>
+  <div class="comment">
+    <span v-if="comment.user !== null">
+      <router-link
+        :to="{ name: 'UserProfile', params: { userId: comment.user._id } }"
+      >
+        {{ comment.user.name }}
+      </router-link>
+    </span>
+    <span v-else> [deleted] </span>
     {{ generalCreatedAt }}
-  </p>
+  </div>
   <p>{{ comment.content }}</p>
+  <Vote :document="comment" documentType="comment" />
 </template>
 
 <script>
 import getGeneralTimeSinceCreation from "@/utils/getTimeBetweenTwoDates.js";
+import Vote from "@/components/Vote";
+
 export default {
+  components: {
+    Vote,
+  },
   props: {
     comment: {
       type: Object,

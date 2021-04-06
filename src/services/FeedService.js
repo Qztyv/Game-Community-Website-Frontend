@@ -34,20 +34,26 @@ export default {
     }
     return response;
   },
-  async createVote(postId, directionVal) {
+  async createDocumentVote(documentId, documentType, directionVal) {
     let response;
     try {
-      response = await apiClient.post(`posts/${postId}/votes`, directionVal);
+      response = await apiClient.post(
+        `${documentType}s/${documentId}/${documentType}Votes`,
+        directionVal
+      );
       response = response.data;
     } catch (err) {
       response = handleServiceErrors(err);
     }
     return response;
   },
-  async updateVote(voteId, directionVal) {
+  async updateDocumentVote(voteId, documentType, directionVal) {
     let response;
     try {
-      response = await apiClient.patch(`votes/${voteId}`, directionVal);
+      response = await apiClient.patch(
+        `${documentType}Votes/${voteId}`,
+        directionVal
+      );
       response = response.data;
     } catch (err) {
       response = handleServiceErrors(err);

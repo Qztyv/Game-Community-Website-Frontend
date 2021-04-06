@@ -96,7 +96,7 @@ export default {
       currentSort.value = "Oldest";
     };
     const sortByHighestLikePercentage = () => {
-      sort.value = "-likePercentage";
+      sort.value = "-likePercentage -likes";
       sortId.value++;
       currentSort.value = "Highest Like Percentage";
     };

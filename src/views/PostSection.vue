@@ -33,6 +33,8 @@
         <p>Sorting by: {{ currentSort }}</p>
         <button @click="sortByNewest">Newest First</button>
         <button @click="sortByOldest">Oldest First</button>
+        <button @click="sortByHighestLikePercentage">Like Percentage</button>
+        <button @click="sortByMostLikes">Most Likes</button>
         <Suspense>
           <template #default>
             <CommentFeed
@@ -126,6 +128,17 @@ export default {
       sortId.value++;
       currentSort.value = "Oldest";
     };
+    const sortByHighestLikePercentage = () => {
+      sort.value = "-likePercentage -likes";
+      sortId.value++;
+      currentSort.value = "Highest Like Percentage";
+    };
+
+    const sortByMostLikes = () => {
+      sort.value = "-likes";
+      sortId.value++;
+      currentSort.value = "Most Likes";
+    };
     return {
       user,
       hasComponentInitiallyLoaded,
@@ -140,6 +153,8 @@ export default {
       currentSort,
       sortByNewest,
       sortByOldest,
+      sortByHighestLikePercentage,
+      sortByMostLikes,
     };
   },
 };
