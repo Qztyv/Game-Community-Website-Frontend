@@ -34,6 +34,10 @@ export default {
       type: Object,
       required: true,
     },
+    sort: {
+      type: String,
+      required: true,
+    },
   },
   async setup(props) {
     const comments = ref([]);
@@ -57,7 +61,8 @@ export default {
       response.value = await FeedService.getAllCommentsOnPost(
         props.postId,
         limit,
-        currentPage
+        currentPage,
+        props.sort
       );
 
       if (response.value.status === "success") {

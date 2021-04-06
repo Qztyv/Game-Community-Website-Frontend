@@ -30,9 +30,17 @@
         </div>
       </div>
       <div id="comments">
+        <p>Sorting by: {{ currentSort }}</p>
+        <button @click="sortByNewest">Newest First</button>
+        <button @click="sortByOldest">Oldest First</button>
         <Suspense>
           <template #default>
-            <CommentFeed :postId="post.id" :newComment="newComment" />
+            <CommentFeed
+              :postId="post.id"
+              :sort="sort"
+              :key="sortId"
+              :newComment="newComment"
+            />
           </template>
           <template #fallback>
             <Loader />
@@ -105,6 +113,19 @@ export default {
         post.value.comments++;
       }
     };
+    const sortId = ref(0);
+    const sort = ref("-createdAt");
+    const currentSort = ref("Newest");
+    const sortByNewest = () => {
+      sort.value = "-createdAt";
+      sortId.value++;
+      currentSort.value = "Newest";
+    };
+    const sortByOldest = () => {
+      sort.value = "createdAt";
+      sortId.value++;
+      currentSort.value = "Oldest";
+    };
     return {
       user,
       hasComponentInitiallyLoaded,
@@ -114,6 +135,11 @@ export default {
       commentResponse,
       newComment,
       addComment,
+      sortId,
+      sort,
+      currentSort,
+      sortByNewest,
+      sortByOldest,
     };
   },
 };

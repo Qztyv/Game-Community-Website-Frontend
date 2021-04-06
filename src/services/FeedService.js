@@ -54,11 +54,11 @@ export default {
     }
     return response;
   },
-  async getAllCommentsOnPost(postId, limit, page) {
+  async getAllCommentsOnPost(postId, limit, page, sort) {
     let response;
     try {
       response = await apiClient.get(
-        `/posts/${postId}/comments?limit=${limit}&page=${page}`
+        `/posts/${postId}/comments?limit=${limit}&page=${page}&sort=${sort}`
       );
       response = response.data;
     } catch (err) {

@@ -29,6 +29,7 @@
     <div id="home-feed">
       <p>Sorting by: {{ currentSort }}</p>
       <button @click="sortByNewest">Newest First</button>
+      <button @click="sortByOldest">Oldest First</button>
       <button @click="sortByHighestLikePercentage">Like Percentage</button>
       <button @click="sortByMostLikes">Most Likes</button>
       <div>
@@ -89,6 +90,11 @@ export default {
       sortId.value++;
       currentSort.value = "Newest";
     };
+    const sortByOldest = () => {
+      sort.value = "createdAt";
+      sortId.value++;
+      currentSort.value = "Oldest";
+    };
     const sortByHighestLikePercentage = () => {
       sort.value = "-likePercentage";
       sortId.value++;
@@ -110,6 +116,7 @@ export default {
       sort,
       currentSort,
       sortByNewest,
+      sortByOldest,
       sortByHighestLikePercentage,
       sortByMostLikes,
     };
