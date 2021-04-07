@@ -27,15 +27,11 @@
       </form>
     </div>
     <div id="home-feed">
-      <p>Sorting by: {{ currentSort }}</p>
-      <button @click="sortByNewest">Newest First</button>
-      <button @click="sortByOldest">Oldest First</button>
-      <button @click="sortByHighestLikePercentage">Like Percentage</button>
-      <button @click="sortByMostLikes">Most Likes</button>
+      <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
       <div>
         <Suspense>
           <template #default>
-            <Feed :sort="sort" :key="sortId" />
+            <PostFeed :sort="sortBy" :key="sortId" />
           </template>
           <template #fallback>
             <Loader />
@@ -51,14 +47,16 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
-import Feed from "@/components/Feed";
+import PostFeed from "@/components/PostFeed";
 import Loader from "@/components/Loader";
 import FeedService from "@/services/FeedService";
+import SortFeedButtons from "@/components/SortFeedButtons";
 export default {
   name: "Home",
   components: {
     Loader,
-    Feed,
+    PostFeed,
+    SortFeedButtons,
   },
   setup() {
     const store = useStore();
@@ -83,28 +81,10 @@ export default {
     };
 
     const sortId = ref(0);
-    const sort = ref("-createdAt");
-    const currentSort = ref("Newest");
-    const sortByNewest = () => {
-      sort.value = "-createdAt";
+    const sortBy = ref("-createdAt");
+    const updateFeedSortBy = (newSortBy) => {
+      sortBy.value = newSortBy;
       sortId.value++;
-      currentSort.value = "Newest";
-    };
-    const sortByOldest = () => {
-      sort.value = "createdAt";
-      sortId.value++;
-      currentSort.value = "Oldest";
-    };
-    const sortByHighestLikePercentage = () => {
-      sort.value = "-likePercentage -likes";
-      sortId.value++;
-      currentSort.value = "Highest Like Percentage";
-    };
-
-    const sortByMostLikes = () => {
-      sort.value = "-likes";
-      sortId.value++;
-      currentSort.value = "Most Likes";
     };
     return {
       user,
@@ -113,12 +93,8 @@ export default {
       addPost,
       response,
       sortId,
-      sort,
-      currentSort,
-      sortByNewest,
-      sortByOldest,
-      sortByHighestLikePercentage,
-      sortByMostLikes,
+      sortBy,
+      updateFeedSortBy,
     };
   },
 };

@@ -3,8 +3,9 @@
     <router-link
       class="post-link"
       :to="{ name: 'PostSection', params: { id: post.id } }"
-      ><Post :post="post"
-    /></router-link>
+    >
+      <Post :post="post" />
+    </router-link>
   </div>
   <div v-if="isLoading">
     <Loader />

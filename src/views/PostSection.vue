@@ -30,16 +30,12 @@
         </div>
       </div>
       <div id="comments">
-        <p>Sorting by: {{ currentSort }}</p>
-        <button @click="sortByNewest">Newest First</button>
-        <button @click="sortByOldest">Oldest First</button>
-        <button @click="sortByHighestLikePercentage">Like Percentage</button>
-        <button @click="sortByMostLikes">Most Likes</button>
+        <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
         <Suspense>
           <template #default>
             <CommentFeed
               :postId="post.id"
-              :sort="sort"
+              :sort="sortBy"
               :key="sortId"
               :newComment="newComment"
             />
@@ -61,12 +57,13 @@ import Post from "@/components/Post";
 import FeedService from "@/services/FeedService.js";
 import Loader from "@/components/Loader";
 import CommentFeed from "@/components/CommentFeed";
-
+import SortFeedButtons from "@/components/SortFeedButtons";
 export default {
   components: {
     Post,
     CommentFeed,
     Loader,
+    SortFeedButtons,
   },
   props: {
     id: {
@@ -116,29 +113,12 @@ export default {
       }
     };
     const sortId = ref(0);
-    const sort = ref("-createdAt");
-    const currentSort = ref("Newest");
-    const sortByNewest = () => {
-      sort.value = "-createdAt";
+    const sortBy = ref("-createdAt");
+    const updateFeedSortBy = (newSortBy) => {
+      sortBy.value = newSortBy;
       sortId.value++;
-      currentSort.value = "Newest";
-    };
-    const sortByOldest = () => {
-      sort.value = "createdAt";
-      sortId.value++;
-      currentSort.value = "Oldest";
-    };
-    const sortByHighestLikePercentage = () => {
-      sort.value = "-likePercentage -likes";
-      sortId.value++;
-      currentSort.value = "Highest Like Percentage";
     };
 
-    const sortByMostLikes = () => {
-      sort.value = "-likes";
-      sortId.value++;
-      currentSort.value = "Most Likes";
-    };
     return {
       user,
       hasComponentInitiallyLoaded,
@@ -149,12 +129,8 @@ export default {
       newComment,
       addComment,
       sortId,
-      sort,
-      currentSort,
-      sortByNewest,
-      sortByOldest,
-      sortByHighestLikePercentage,
-      sortByMostLikes,
+      sortBy,
+      updateFeedSortBy,
     };
   },
 };
