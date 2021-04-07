@@ -92,4 +92,28 @@ export default {
     }
     return response;
   },
+  async getAllUserPosts(userId, limit, page, sort) {
+    let response;
+    try {
+      response = await apiClient.get(
+        `/users/${userId}/posts?limit=${limit}&page=${page}&sort=${sort}`
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async getAllCommentsByUser(userId, limit, page, sort) {
+    let response;
+    try {
+      response = await apiClient.get(
+        `/users/${userId}/comments?limit=${limit}&page=${page}&sort=${sort}`
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
 };

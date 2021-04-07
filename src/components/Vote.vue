@@ -12,7 +12,7 @@
     >
       likes: {{ likes }}
     </button>
-    <p v-if="direction === 1">You have liked this document</p>
+    <p v-if="direction === 1">You have liked this {{ documentType }}</p>
     <button
       @click="
         direction === -1
@@ -22,7 +22,7 @@
     >
       dislikes: {{ dislikes }}
     </button>
-    <p v-if="direction === -1">You have disliked this document</p>
+    <p v-if="direction === -1">You have disliked this {{ documentType }}</p>
   </div>
 </template>
 

@@ -11,17 +11,12 @@
     {{ generalCreatedAt }}
   </div>
   <p>{{ comment.content }}</p>
-  <Vote :document="comment" documentType="comment" />
 </template>
 
 <script>
 import getGeneralTimeSinceCreation from "@/utils/getTimeBetweenTwoDates.js";
-import Vote from "@/components/Vote";
 
 export default {
-  components: {
-    Vote,
-  },
   props: {
     comment: {
       type: Object,

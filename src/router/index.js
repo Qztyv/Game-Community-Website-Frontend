@@ -11,6 +11,8 @@ import ForgotPassword from "@/views/ForgotPassword.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import PostSection from "@/views/PostSection.vue";
 import UserProfile from "@/views/UserProfile.vue";
+import UserPosts from "@/views/nested_views/UserPosts.vue";
+import UserComments from "@/views/nested_views/UserComments.vue";
 
 const requireAuth = (to, from, next) => {
   if (!Object.keys(store.state.user).length) {
@@ -103,16 +105,17 @@ const routes = [
       {
         path: "posts",
         name: "UserPosts",
-        component: Home,
+        component: UserPosts,
       },
       {
-        path: ":comments",
-        component: Profile,
+        path: "comments",
+        name: "UserComments",
+        component: UserComments,
       },
-      {
-        path: "",
-        component: Home,
-      },
+      // {
+      //   path: "",
+      //   component: Home,
+      // },
     ],
   },
   {

@@ -31,7 +31,7 @@
       <div>
         <Suspense>
           <template #default>
-            <PostFeed :sort="sortBy" :key="sortId" />
+            <PostFeed :sort="sortBy" :key="sortId" feedType="All" />
           </template>
           <template #fallback>
             <Loader />
@@ -47,16 +47,17 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
-import PostFeed from "@/components/PostFeed";
-import Loader from "@/components/Loader";
 import FeedService from "@/services/FeedService";
 import SortFeedButtons from "@/components/SortFeedButtons";
+import PostFeed from "@/components/PostFeed";
+import Loader from "@/components/Loader";
+
 export default {
   name: "Home",
   components: {
+    SortFeedButtons,
     Loader,
     PostFeed,
-    SortFeedButtons,
   },
   setup() {
     const store = useStore();

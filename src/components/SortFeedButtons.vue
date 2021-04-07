@@ -23,10 +23,10 @@ export default {
         sort = "createdAt";
       }
       if (option === "Highest Like Percentage") {
-        sort = "-likePercentage -likes";
+        sort = "-likePercentage,-likes";
       }
       if (option === "Most Likes") {
-        sort = "-likes";
+        sort = "-likes,dislikes";
       }
       currentSort.value = option;
       context.emit("sortBy", sort);

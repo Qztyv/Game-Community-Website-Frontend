@@ -1,19 +1,21 @@
 <template>
-  <div class="post" v-for="post in posts" :key="post.id">
-    <router-link
-      class="post-link"
-      :to="{ name: 'PostSection', params: { id: post.id } }"
-    >
-      <Post :post="post" />
-    </router-link>
+  <div v-for="comment in comments" :key="comment.id">
+    <h3>
+      <router-link
+        :to="{ name: 'PostSection', params: { id: comment.post.id } }"
+        >{{ comment.post.postTitle }}
+      </router-link>
+    </h3>
+    <Comment :comment="comment" />
+    <p>Likes: {{ comment.likes }} Dislikes: {{ comment.dislikes }}</p>
   </div>
   <div v-if="isLoading">
     <Loader />
   </div>
   <div v-if="responseResults !== 0">
-    <button @click="handleManualFetch">Fetch more posts</button>
+    <button @click="handleManualFetch">Fetch More</button>
   </div>
-  <div v-if="responseResults === 0">No more posts left in the feed!</div>
+  <div v-if="responseResults === 0">No more comments made</div>
   <div v-if="response">
     {{ response.message }}
   </div>
@@ -21,77 +23,69 @@
 
 <script>
 import { onMounted, onUnmounted, ref } from "vue";
-import Post from "@/components/Post";
 import FeedService from "@/services/FeedService.js";
+import Comment from "@/components/Comment";
 import Loader from "@/components/Loader";
 
 export default {
   components: {
-    Post,
+    Comment,
     Loader,
   },
   props: {
+    userId: {
+      type: String,
+      required: true,
+    },
     sort: {
       type: String,
       required: true,
     },
-    feedType: {
-      type: String,
-      required: true,
-    },
-    userId: {
-      type: String,
-      required: false,
-    },
   },
   async setup(props) {
-    const posts = ref([]);
+    const comments = ref([]);
+
     const responseResults = ref(-1);
-    const limit = 5;
+    const limit = 10;
     let currentPage = 0;
 
     const isLoading = ref(false);
 
     const response = ref(null);
-    const fetchFeed = async () => {
+    const fetchUserComments = async () => {
       currentPage++;
 
-      if (props.feedType === "All") {
-        response.value = await FeedService.getAllPosts(
-          limit,
-          currentPage,
-          props.sort
-        );
-      }
-      if (props.feedType === "User") {
-        response.value = await FeedService.getAllUserPosts(
-          props.userId,
-          limit,
-          currentPage,
-          props.sort
-        );
-      }
+      response.value = await FeedService.getAllCommentsByUser(
+        props.userId,
+        limit,
+        currentPage,
+        props.sort
+      );
+
       if (response.value.status === "success") {
-        posts.value = [...posts.value, ...response.value.data.data];
+        console.log(response.value);
+
+        comments.value = [...comments.value, ...response.value.data.data];
         responseResults.value = response.value.results;
       }
     };
+
     const handleScroll = async () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         if (responseResults.value === 0 || isLoading.value) {
           return;
         }
         isLoading.value = true;
-        await fetchFeed();
+        await fetchUserComments();
         isLoading.value = false;
       }
     };
-
     const handleManualFetch = async () => {
       isLoading.value = true;
-      await fetchFeed();
+      await fetchUserComments();
       isLoading.value = false;
     };
+
     onMounted(() => {
       window.addEventListener("scroll", handleScroll);
     });
@@ -101,9 +95,9 @@ export default {
       window.removeEventListener("scroll", handleScroll);
     });
 
-    await fetchFeed();
+    await fetchUserComments();
     return {
-      posts,
+      comments,
       isLoading,
       responseResults,
       response,
@@ -113,20 +107,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.post-link {
-  color: #2c3e50;
-  text-decoration: none;
-}
-.post {
-  padding: 20px;
-  cursor: pointer;
-  border: 1px solid #39495c;
-  margin-bottom: 18px;
-}
-
-.post:hover {
-  transform: scale(1.01);
-  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
-}
-</style>
+<style></style>

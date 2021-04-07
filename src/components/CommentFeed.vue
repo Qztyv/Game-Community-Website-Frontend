@@ -1,6 +1,7 @@
 <template>
   <div v-for="comment in comments" :key="comment.id">
     <Comment :comment="comment" />
+    <Vote :document="comment" documentType="comment" />
   </div>
   <div v-if="isLoading">
     <Loader />
@@ -19,11 +20,13 @@ import { onMounted, onUnmounted, ref, watch } from "vue";
 import FeedService from "@/services/FeedService.js";
 import Comment from "@/components/Comment";
 import Loader from "@/components/Loader";
+import Vote from "@/components/Vote";
 
 export default {
   components: {
     Comment,
     Loader,
+    Vote,
   },
   props: {
     postId: {
