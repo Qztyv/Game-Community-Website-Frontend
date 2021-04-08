@@ -3,29 +3,33 @@
     {{ response.message }}
   </div>
   <div v-if="hasComponentInitiallyLoaded">
-    <div id="user-profile">
-      <p>{{ user.photo }} PHOTO PLACEHOLDER</p>
-      <p>
-        {{ user.name }}
-        <span v-if="user.role === 'admin'"> - Admin</span>
-      </p>
-    </div>
-    <div id="chosen_feed">
-      <router-link :to="{ name: 'UserPosts', params: { userId: userId } }"
-        >All Posts</router-link
-      >
-      |
-      <router-link :to="{ name: 'UserComments', params: { userId: userId } }"
-        >All Comments</router-link
-      >
-      <!-- <div id="own_user" v-if="loggedInUser._id === user._id">
+    <div v-if="user">
+      <div id="user-profile">
+        <p>{{ user.photo }} PHOTO PLACEHOLDER</p>
+        <p>
+          {{ user.name }}
+          <span v-if="user.role === 'admin'"> - Admin</span>
+        </p>
+      </div>
+      <div id="chosen_feed">
+        <router-link :to="{ name: 'UserPosts', params: { userId: userId } }"
+          >All Posts</router-link
+        >
+        |
+        <router-link :to="{ name: 'UserComments', params: { userId: userId } }"
+          >All Comments</router-link
+        >
+        <!-- <div id="own_user" v-if="loggedInUser._id === user._id">
         | <router-link to="/user/post-votes">Voted Posts</router-link> |
         <router-link to="/user/comment-votes">Voted Comments</router-link>
       </div> -->
+      </div>
+      <router-view :userId="userId"></router-view>
     </div>
-    <router-view :userId="userId"></router-view>
   </div>
-  <div v-else><Loader /></div>
+  <div v-else>
+    <Loader />
+  </div>
 </template>
 
 <script>

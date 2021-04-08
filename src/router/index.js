@@ -112,10 +112,10 @@ const routes = [
         name: "UserComments",
         component: UserComments,
       },
-      // {
-      //   path: "",
-      //   component: Home,
-      // },
+      {
+        path: "",
+        component: UserPosts,
+      },
     ],
   },
   {
