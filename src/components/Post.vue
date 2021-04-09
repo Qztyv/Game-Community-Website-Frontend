@@ -13,7 +13,11 @@
   </div>
   <div class="content">
     <h1>{{ post.postTitle }}</h1>
-    <p>{{ post.postContent }}</p>
+    <div class="post-image" v-if="post.image">
+      <!-- could make image responsive with materialize -->
+      <img :src="post.image" alt="Post Image" width="750" height="500" />
+    </div>
+    <p v-if="post.postContent">{{ post.postContent }}</p>
   </div>
   <Vote :document="post" documentType="post" />
   <p>comments: {{ post.comments }}</p>
