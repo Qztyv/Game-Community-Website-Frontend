@@ -9,7 +9,15 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
     <router-link to="/settings">Settings</router-link> |
-    <a href="#" @click="logout">Log Out</a>
+    <a href="#" @click="logout">Log Out</a> |
+    <router-link :to="{ name: 'UserProfile', params: { userId: user._id } }">
+      <img
+        :src="user.photo"
+        alt="Profile Photo"
+        width="50"
+        height="50"
+      />Profile
+    </router-link>
   </div>
 </template>
 
