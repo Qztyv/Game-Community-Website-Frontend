@@ -2,6 +2,12 @@
 
 This frontend application was built using Vue to achieve a responsive SPA. It connects up the backend API created using MongoDB, Express, and Node.js, forming the MEVN stack.
 
+Front-end URL: https://game-community-website-frontend.netlify.app/
+
+Back-end URL: https://game-community-website-backend.herokuapp.com/
+
+NOTE: Heroku backend turns off after 30 minutes. So when making a request to the backend via the frontend (or by postman), it may say no response from the server as the server is turning on. Try making a request again and it should start working.
+
 # Trello Kanban board (For both backend / front-end repositories)
 
 https://trello.com/b/H8WifmRt/gaming-community-website-kanban
