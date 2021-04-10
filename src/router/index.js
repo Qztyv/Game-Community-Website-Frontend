@@ -10,6 +10,10 @@ import Profile from "@/views/nested_views/Profile.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import PostSection from "@/views/PostSection.vue";
+import UserProfile from "@/views/UserProfile.vue";
+import UserPosts from "@/views/nested_views/UserPosts.vue";
+import UserComments from "@/views/nested_views/UserComments.vue";
+
 const requireAuth = (to, from, next) => {
   if (!Object.keys(store.state.user).length) {
     return next({ name: "Login" });
@@ -91,6 +95,28 @@ const routes = [
     name: "PostSection",
     component: PostSection,
     props: true,
+  },
+  {
+    path: "/user/:userId",
+    name: "UserProfile",
+    component: UserProfile,
+    props: true,
+    children: [
+      {
+        path: "posts",
+        name: "UserPosts",
+        component: UserPosts,
+      },
+      {
+        path: "comments",
+        name: "UserComments",
+        component: UserComments,
+      },
+      {
+        path: "",
+        component: UserPosts,
+      },
+    ],
   },
   {
     path: "/:pathMatch(.*)*",

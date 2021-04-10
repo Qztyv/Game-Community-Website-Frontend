@@ -6,9 +6,25 @@
   <h3>Account Details</h3>
   <form @submit.prevent="updateAccount">
     <label for="email">Email</label>
-    <input type="email" id="email" v-model="email" required />
+    <input type="email" id="email" name="email" v-model="email" required />
     <label for="name">Name</label>
-    <input type="text" id="name" v-model="name" minlength="4" required />
+    <input
+      type="text"
+      id="name"
+      name="name"
+      v-model="name"
+      minlength="4"
+      required
+    />
+    <img :src="user.photo" alt="Profile Photo" width="50" height="50" />
+    <label for="photo">Select a new photo</label>
+    <input
+      type="file"
+      @change="file = $event.target.files[0]"
+      accept="image/*"
+      id="photo"
+      name="photo"
+    />
     <button type="submit">Update Details</button>
   </form>
   <h3>Password Change</h3>
@@ -63,14 +79,18 @@ export default {
     const user = computed(() => store.state.user);
     let email = ref(user.value.email);
     let name = ref(user.value.name);
+    let file = ref(null);
 
     let response = ref(null);
 
     const updateAccount = async () => {
-      response.value = await AuthService.updateAccount({
-        email: email.value,
-        name: name.value,
-      });
+      // Need to create a multi-part form since part of the form contains an image that
+      // we are sending. If we dont do this then the image is ignored.
+      const form = new FormData();
+      form.append("name", name.value);
+      form.append("email", email.value);
+      form.append("photo", file.value);
+      response.value = await AuthService.updateAccount(form);
       if (response.value.status === "success") {
         store.dispatch("addNotification", {
           type: "success",
@@ -119,8 +139,10 @@ export default {
     };
 
     return {
+      user,
       email,
       name,
+      file,
       updateAccount,
       response,
       currentPassword,

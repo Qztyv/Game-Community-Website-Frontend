@@ -3,11 +3,15 @@
     <router-link
       class="post-link"
       :to="{ name: 'PostSection', params: { id: post.id } }"
-      ><Post :post="post"
-    /></router-link>
+    >
+      <Post :post="post" />
+    </router-link>
   </div>
   <div v-if="isLoading">
     <Loader />
+  </div>
+  <div v-if="responseResults !== 0">
+    <button @click="handleManualFetch">Fetch more posts</button>
   </div>
   <div v-if="responseResults === 0">No more posts left in the feed!</div>
   <div v-if="response">
@@ -20,25 +24,53 @@ import { onMounted, onUnmounted, ref } from "vue";
 import Post from "@/components/Post";
 import FeedService from "@/services/FeedService.js";
 import Loader from "@/components/Loader";
+
 export default {
   components: {
     Post,
     Loader,
   },
-  async setup() {
+  props: {
+    sort: {
+      type: String,
+      required: true,
+    },
+    feedType: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: String,
+      required: false,
+    },
+  },
+  async setup(props) {
     const posts = ref([]);
     const responseResults = ref(-1);
-    const currentPage = ref(0);
     const limit = 5;
+    let currentPage = 0;
 
     const isLoading = ref(false);
 
     const response = ref(null);
     const fetchFeed = async () => {
-      currentPage.value++;
+      currentPage++;
 
-      response.value = await FeedService.getAllPosts(limit, currentPage.value);
-
+      if (props.feedType === "All") {
+        response.value = await FeedService.getAllPosts(
+          limit,
+          currentPage,
+          props.sort
+        );
+      }
+      if (props.feedType === "User") {
+        response.value = await FeedService.getAllUserPosts(
+          props.userId,
+          limit,
+          currentPage,
+          props.sort
+        );
+      }
       if (response.value.status === "success") {
         posts.value = [...posts.value, ...response.value.data.data];
         responseResults.value = response.value.results;
@@ -55,6 +87,11 @@ export default {
       }
     };
 
+    const handleManualFetch = async () => {
+      isLoading.value = true;
+      await fetchFeed();
+      isLoading.value = false;
+    };
     onMounted(() => {
       window.addEventListener("scroll", handleScroll);
     });
@@ -70,6 +107,7 @@ export default {
       isLoading,
       responseResults,
       response,
+      handleManualFetch,
     };
   },
 };
