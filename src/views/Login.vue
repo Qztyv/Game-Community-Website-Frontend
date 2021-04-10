@@ -56,6 +56,7 @@ export default {
           type: "success",
           message: "Logged-in successfully! Redirecting...",
         });
+        store.dispatch("storeToken", response.value.token);
         store.dispatch("storeUser", response.value.data.user);
         timeout = setTimeout(() => {
           router.push({ name: "Home" });

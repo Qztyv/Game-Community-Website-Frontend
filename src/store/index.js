@@ -6,6 +6,7 @@ const store = createStore({
   plugins: [createPersistedState()],
   state: {
     notifications: [],
+    token: "",
     user: {},
   },
   mutations: {
@@ -20,11 +21,15 @@ const store = createStore({
         (el) => el.id !== notification.id
       );
     },
+    STORE_TOKEN(state, token) {
+      state.token = token;
+    },
     STORE_USER(state, user) {
       state.user = user;
     },
     LOGOUT_USER(state) {
       state.user = {};
+      state.token = "";
     },
   },
   actions: {
@@ -33,6 +38,9 @@ const store = createStore({
     },
     deleteNotification({ commit }, notification) {
       commit("DELETE_NOTIFICATION", notification);
+    },
+    storeToken({ commit }, token) {
+      commit("STORE_TOKEN", token);
     },
     storeUser({ commit }, user) {
       commit("STORE_USER", user);
