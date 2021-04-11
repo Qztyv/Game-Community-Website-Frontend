@@ -37,6 +37,7 @@
       </form>
     </div>
     <div id="home-feed">
+      <h2>Feed of All Posts</h2>
       <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
       <div>
         <Suspense>

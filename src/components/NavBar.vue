@@ -1,12 +1,13 @@
 <template>
   <div id="nav" v-if="!Object.keys(user).length">
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">All Posts</router-link> |
     <router-link to="/about">About</router-link> |
     <router-link to="/login">Log In</router-link> |
     <router-link to="/signup">Sign Up</router-link>
   </div>
   <div id="nav" v-else>
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">All Posts</router-link> |
+    <router-link to="/following-feed">Following Feed</router-link> |
     <router-link to="/about">About</router-link> |
     <router-link to="/settings">Settings</router-link> |
     <a href="#" @click="logout">Log Out</a> |

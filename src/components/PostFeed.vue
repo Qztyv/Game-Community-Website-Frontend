@@ -71,6 +71,15 @@ export default {
           props.sort
         );
       }
+      // Only logged in users can access following-feed (backend will authenticate automatically)
+      if (props.feedType === "Following") {
+        response.value = await FeedService.getAllFollowingPosts(
+          limit,
+          currentPage,
+          props.sort
+        );
+      }
+
       if (response.value.status === "success") {
         posts.value = [...posts.value, ...response.value.data.data];
         responseResults.value = response.value.results;
