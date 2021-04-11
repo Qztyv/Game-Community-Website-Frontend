@@ -1,10 +1,11 @@
 <template>
-  <div id="users-comments">
+  <div id="following-feed">
+    <h2>Feed of Following</h2>
     <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
     <div>
       <Suspense>
         <template #default>
-          <UserCommentFeed :sort="sortBy" :key="sortId" :userId="userId" />
+          <PostFeed :sort="sortBy" :key="sortId" feedType="Following" />
         </template>
         <template #fallback>
           <Loader />
@@ -15,23 +16,25 @@
 </template>
 
 <script>
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
+
 import SortFeedButtons from "@/components/SortFeedButtons";
-import UserCommentFeed from "@/components/UserCommentFeed";
+import PostFeed from "@/components/PostFeed";
 import Loader from "@/components/Loader";
-import { ref } from "vue";
+
 export default {
+  name: "Home",
   components: {
     SortFeedButtons,
-    UserCommentFeed,
     Loader,
-  },
-  props: {
-    userId: {
-      type: String,
-      required: true,
-    },
+    PostFeed,
   },
   setup() {
+    const store = useStore();
+
+    const user = computed(() => store.state.user);
+
     const sortId = ref(0);
     const sortBy = ref("-createdAt");
     const updateFeedSortBy = (newSortBy) => {
@@ -39,6 +42,7 @@ export default {
       sortId.value++;
     };
     return {
+      user,
       sortId,
       sortBy,
       updateFeedSortBy,
@@ -46,5 +50,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

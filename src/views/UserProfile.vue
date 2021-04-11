@@ -10,6 +10,14 @@
           {{ user.name }}
           <span v-if="user.role === 'admin'"> - Admin</span>
         </p>
+        <p>followers: {{ user.followers }}, following: {{ user.following }}</p>
+        <div v-if="loggedInUser._id !== user._id">
+          <FollowOptions
+            :profileUserId="user._id"
+            @incrementFollowerCounter="user.followers++"
+            @decrementFollowerCounter="user.followers--"
+          />
+        </div>
       </div>
       <div id="chosen_feed">
         <router-link :to="{ name: 'UserPosts', params: { userId: userId } }"
@@ -36,9 +44,11 @@
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useStore } from "vuex";
 import FeedService from "@/services/FeedService.js";
+import FollowOptions from "@/components/FollowOptions";
 import Loader from "@/components/Loader";
 export default {
   components: {
+    FollowOptions,
     Loader,
   },
   props: {
@@ -69,7 +79,6 @@ export default {
       response.value = await FeedService.getUser(id);
       if (response.value.status === "success") {
         user.value = response.value.data.data;
-        console.log(user.value);
       }
     };
 

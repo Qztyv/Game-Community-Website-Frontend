@@ -13,6 +13,7 @@ import PostSection from "@/views/PostSection.vue";
 import UserProfile from "@/views/UserProfile.vue";
 import UserPosts from "@/views/nested_views/UserPosts.vue";
 import UserComments from "@/views/nested_views/UserComments.vue";
+import FollowingPosts from "@/views/FollowingPosts.vue";
 
 const requireAuth = (to, from, next) => {
   if (!Object.keys(store.state.user).length) {
@@ -35,6 +36,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/following-feed",
+    name: "FollowingPosts",
+    component: FollowingPosts,
   },
   {
     path: "/about",
