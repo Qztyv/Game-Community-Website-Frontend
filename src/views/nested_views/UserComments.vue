@@ -31,8 +31,7 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    console.log(props.userId);
+  setup() {
     const sortId = ref(0);
     const sortBy = ref("-createdAt");
     const updateFeedSortBy = (newSortBy) => {
