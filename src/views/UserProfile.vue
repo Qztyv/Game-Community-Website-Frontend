@@ -10,7 +10,16 @@
           {{ user.name }}
           <span v-if="user.role === 'admin'"> - Admin</span>
         </p>
-        <p>followers: {{ user.followers }}, following: {{ user.following }}</p>
+        <div class="follow-stats">
+          <div class="followers">
+            <router-link
+              :to="{ name: 'UserFollowers', params: { userId: userId } }"
+            >
+              followers: {{ user.followers }}</router-link
+            >
+          </div>
+          <div class="following">following: {{ user.following }}</div>
+        </div>
         <div v-if="loggedInUser._id !== user._id">
           <FollowOptions
             :profileUserId="user._id"

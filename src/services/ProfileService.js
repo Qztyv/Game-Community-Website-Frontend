@@ -12,6 +12,16 @@ export default {
     }
     return response;
   },
+  async getUserFollowers(userId) {
+    let response;
+    try {
+      response = await apiClient.get(`users/${userId}/followers`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async addFollowingToLoggedInUser(profileUserId) {
     let response;
     try {

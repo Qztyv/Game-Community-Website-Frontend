@@ -20,10 +20,11 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import SortFeedButtons from "@/components/SortFeedButtons";
 import PostFeed from "@/components/PostFeed";
 import Loader from "@/components/Loader";
-import { ref } from "vue";
+
 export default {
   components: {
     SortFeedButtons,

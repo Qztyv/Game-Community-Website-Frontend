@@ -40,17 +40,18 @@ export default {
       let response = await ProfileService.getUserFollowing(
         loggedInUser.value._id
       );
+      // returns logged in users following
       let following = [];
       if (response.status === "success" && response.data.data.length) {
         following = response.data.data[0].following;
       }
+      // compare logged in users following to the userId of the profile to see whether
+      // they are already following or not - this determines the follow/unfollow functionality button
       isFollowing.value = following.some(
         (userEl) => userEl._id === props.profileUserId
       );
       hasComponentInitiallyLoaded.value = true;
     });
-
-    // is the logged in user already following the visited profile user.
 
     const response = ref(null);
     const addFollowing = async () => {
