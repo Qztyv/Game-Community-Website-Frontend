@@ -45,4 +45,15 @@ export default {
     }
     return response;
   },
+  async removeFollowerFromLoggedInUser(profileUserId) {
+    let response;
+    try {
+      response = await apiClient.delete(
+        `followers/removeFollower/${profileUserId}`
+      );
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
 };

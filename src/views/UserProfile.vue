@@ -41,7 +41,10 @@
         <router-link to="/user/comment-votes">Voted Comments</router-link>
       </div> -->
       </div>
-      <router-view :userId="userId"></router-view>
+      <router-view
+        :userId="userId"
+        @decrementFollowerCounter="user.followers--"
+      ></router-view>
     </div>
   </div>
   <div v-else>
