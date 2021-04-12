@@ -56,7 +56,11 @@ export default {
       required: true,
     },
   },
-  emits: ["decrementFollowerCounter"],
+  emits: [
+    "decrementFollowerCounter",
+    "decrementFollowingCounter",
+    "incrementFollowingCounter",
+  ],
   setup(props, context) {
     const hasComponentInitiallyLoaded = ref(false);
 
@@ -74,6 +78,8 @@ export default {
     onBeforeMount(async () => {
       followers.value = await getProfileFollowers();
 
+      // users viewing their own profile will see a "remove" follower button instead
+      // of a follow/unfollow.
       if (props.userId !== loggedInUser.value._id) {
         // get logged in user following so we can compare against profile followers
         // and allow our logged in user to follow / unfollow users they have also.
@@ -95,6 +101,7 @@ export default {
       ) {
         return profileFollowersResponse.value.data.data[0].followers;
       }
+      return [];
     };
 
     // we get the logged in following to compare against the profile followers, so we can add
@@ -109,6 +116,7 @@ export default {
       ) {
         return loggedInUserFollowingResponse.value.data.data[0].following;
       }
+      return [];
     };
 
     // we use isBeingFollowed property to determine what button to show on template
@@ -128,9 +136,9 @@ export default {
     // that we previously added, so that the follow/unfollow button for each user on the list is reflected accurately.
     const alterFollowRelationShipResponse = ref(null);
     const addFollowing = async (followerIndex) => {
-      const userToFollower = followers.value[followerIndex];
+      const userToFollow = followers.value[followerIndex];
       alterFollowRelationShipResponse.value = await ProfileService.addFollowingToLoggedInUser(
-        userToFollower._id
+        userToFollow._id
       );
       if (alterFollowRelationShipResponse.value.status === "success") {
         followers.value[followerIndex].isBeingFollowed = true;
@@ -154,6 +162,7 @@ export default {
         followerToRemove._id
       );
       if (alterFollowRelationShipResponse.value.status === 204) {
+        // remove the follower from the list, and decrement the counter to represent that
         followers.value.splice(followerIndex, 1);
         context.emit("decrementFollowerCounter");
       }

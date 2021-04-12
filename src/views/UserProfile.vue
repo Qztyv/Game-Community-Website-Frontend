@@ -18,7 +18,12 @@
               followers: {{ user.followers }}</router-link
             >
           </div>
-          <div class="following">following: {{ user.following }}</div>
+          <div class="following">
+            <router-link
+              :to="{ name: 'UserFollowing', params: { userId: userId } }"
+              >following: {{ user.following }}</router-link
+            >
+          </div>
         </div>
         <div v-if="loggedInUser._id !== user._id">
           <FollowOptions
@@ -44,6 +49,8 @@
       <router-view
         :userId="userId"
         @decrementFollowerCounter="user.followers--"
+        @decrementFollowingCounter="user.following--"
+        @incrementFollowingCounter="user.following++"
       ></router-view>
     </div>
   </div>
