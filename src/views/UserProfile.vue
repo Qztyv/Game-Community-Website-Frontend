@@ -10,7 +10,21 @@
           {{ user.name }}
           <span v-if="user.role === 'admin'"> - Admin</span>
         </p>
-        <p>followers: {{ user.followers }}, following: {{ user.following }}</p>
+        <div class="follow-stats">
+          <div class="followers">
+            <router-link
+              :to="{ name: 'UserFollowers', params: { userId: userId } }"
+            >
+              followers: {{ user.followers }}</router-link
+            >
+          </div>
+          <div class="following">
+            <router-link
+              :to="{ name: 'UserFollowing', params: { userId: userId } }"
+              >following: {{ user.following }}</router-link
+            >
+          </div>
+        </div>
         <div v-if="loggedInUser._id !== user._id">
           <FollowOptions
             :profileUserId="user._id"
@@ -32,7 +46,12 @@
         <router-link to="/user/comment-votes">Voted Comments</router-link>
       </div> -->
       </div>
-      <router-view :userId="userId"></router-view>
+      <router-view
+        :userId="userId"
+        @decrementFollowerCounter="user.followers--"
+        @decrementFollowingCounter="user.following--"
+        @incrementFollowingCounter="user.following++"
+      ></router-view>
     </div>
   </div>
   <div v-else>

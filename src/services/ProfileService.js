@@ -12,6 +12,16 @@ export default {
     }
     return response;
   },
+  async getUserFollowers(userId) {
+    let response;
+    try {
+      response = await apiClient.get(`users/${userId}/followers`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async addFollowingToLoggedInUser(profileUserId) {
     let response;
     try {
@@ -29,6 +39,17 @@ export default {
     try {
       response = await apiClient.delete(
         `following/removeFollowing/${profileUserId}`
+      );
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async removeFollowerFromLoggedInUser(profileUserId) {
+    let response;
+    try {
+      response = await apiClient.delete(
+        `followers/removeFollower/${profileUserId}`
       );
     } catch (err) {
       response = handleServiceErrors(err);

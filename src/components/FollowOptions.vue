@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { useStore } from "vuex";
 import ProfileService from "./../services/ProfileService.js";
 
@@ -25,6 +25,13 @@ export default {
     },
   },
   setup(props, context) {
+    watch(
+      () => props.profileUserId,
+      (newValue) => {
+        getUserFollowingAndCheckIfFollowing(newValue);
+      }
+    );
+
     const hasComponentInitiallyLoaded = ref(false);
 
     const store = useStore();
@@ -37,6 +44,11 @@ export default {
     // There is too many edge cases to consider when using vuex for storing these things, just
     // to simply save calls to the database - it isnt worth it for now atleast.
     onBeforeMount(async () => {
+      getUserFollowingAndCheckIfFollowing(props.profileUserId);
+      hasComponentInitiallyLoaded.value = true;
+    });
+
+    const getUserFollowingAndCheckIfFollowing = async (userId) => {
       let response = await ProfileService.getUserFollowing(
         loggedInUser.value._id
       );
@@ -44,13 +56,10 @@ export default {
       if (response.status === "success" && response.data.data.length) {
         following = response.data.data[0].following;
       }
-      isFollowing.value = following.some(
-        (userEl) => userEl._id === props.profileUserId
-      );
-      hasComponentInitiallyLoaded.value = true;
-    });
-
-    // is the logged in user already following the visited profile user.
+      // compare logged in users following to the userId of the profile to see whether
+      // they are already following or not - this determines the follow/unfollow functionality button
+      isFollowing.value = following.some((userEl) => userEl._id === userId);
+    };
 
     const response = ref(null);
     const addFollowing = async () => {
