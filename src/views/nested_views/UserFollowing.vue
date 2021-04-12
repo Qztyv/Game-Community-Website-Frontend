@@ -39,6 +39,7 @@ import { computed, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
 import ProfileService from "../../services/ProfileService";
 import Loader from "@/components/Loader";
+import followUtils from "../../utils/followUtils";
 export default {
   components: {
     Loader,
@@ -67,15 +68,19 @@ export default {
     const following = ref([]);
     let profileFollowingResponse = ref(null);
     const loggedInFollowing = ref([]);
-    let loggedInUserFollowingResponse = ref(null);
+
     onBeforeMount(async () => {
       following.value = await getProfileFollowing();
 
       // Get logged in user following so we can compare against profile following.
-      loggedInFollowing.value = await getLoggedInFollowing();
+      loggedInFollowing.value = await followUtils.getLoggedInFollowing(
+        loggedInUser.value._id
+      );
 
-      appendIsBeingFollowedProperty();
-
+      followUtils.appendIsBeingFollowedProperty(
+        following.value,
+        loggedInFollowing.value
+      );
       hasComponentInitiallyLoaded.value = true;
     });
 
@@ -93,32 +98,6 @@ export default {
       return [];
     };
 
-    // we get the logged in following to compare against the profile following, so we can add
-    // options to follow / unfollow other peoples followings.
-    const getLoggedInFollowing = async () => {
-      loggedInUserFollowingResponse.value = await ProfileService.getUserFollowing(
-        loggedInUser.value._id
-      );
-      if (
-        loggedInUserFollowingResponse.value.status === "success" &&
-        loggedInUserFollowingResponse.value.data.data.length
-      ) {
-        return loggedInUserFollowingResponse.value.data.data[0].following;
-      }
-      return [];
-    };
-
-    // we use isBeingFollowed property to determine what button to show on template
-    // for each following in the list
-    const appendIsBeingFollowedProperty = () => {
-      for (let i = 0; i < following.value.length; i++) {
-        for (let y = 0; y < loggedInFollowing.value.length; y++) {
-          if (following.value[i]._id === loggedInFollowing.value[y]._id) {
-            following.value[i].isBeingFollowed = true;
-          }
-        }
-      }
-    };
     // In the scenario that a logged in user is viewing another users profile and their following,
     // they should be able to follow the users on that list, or unfollow them if they already follow them.
     // Due to reactivity of the following array, we can change the "isBeingFollowed" property
