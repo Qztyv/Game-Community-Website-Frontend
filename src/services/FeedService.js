@@ -24,6 +24,25 @@ export default {
     }
     return response;
   },
+  async updatePost(postId, postForm) {
+    let response;
+    try {
+      response = await apiClient.patch(`posts/${postId}`, postForm);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async deletePost(postId) {
+    let response;
+    try {
+      response = await apiClient.delete(`posts/${postId}`);
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async getPost(postId) {
     let response;
     try {
@@ -79,6 +98,15 @@ export default {
     try {
       response = await apiClient.post(`/posts/${postId}/comments`, commentForm);
       response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async deleteComment(commentId) {
+    let response;
+    try {
+      response = await apiClient.delete(`comments/${commentId}`);
     } catch (err) {
       response = handleServiceErrors(err);
     }

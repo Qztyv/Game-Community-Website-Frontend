@@ -25,7 +25,11 @@
             >
           </div>
         </div>
-        <div v-if="loggedInUser._id !== user._id">
+        <div
+          v-if="
+            loggedInUser._id !== user._id && Object.keys(loggedInUser).length
+          "
+        >
           <FollowOptions
             :profileUserId="user._id"
             @incrementFollowerCounter="user.followers++"

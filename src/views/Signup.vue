@@ -79,6 +79,8 @@ export default {
           type: "success",
           message: "Signed-up successfully! Redirecting...",
         });
+        // Store token. Note, we also need to update the apiClient axios object in the service.
+        store.dispatch("storeToken", response.value.token);
         store.dispatch("storeUser", response.value.data.user);
         timeout = setTimeout(() => {
           router.push({ name: "Home" });
