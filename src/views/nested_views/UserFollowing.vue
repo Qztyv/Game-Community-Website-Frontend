@@ -72,15 +72,17 @@ export default {
     onBeforeMount(async () => {
       following.value = await getProfileFollowing();
 
-      // Get logged in user following so we can compare against profile following.
-      loggedInFollowing.value = await followUtils.getLoggedInFollowing(
-        loggedInUser.value._id
-      );
+      if (Object.keys(loggedInUser.value).length) {
+        // Get logged in user following so we can compare against profile following.
+        loggedInFollowing.value = await followUtils.getLoggedInFollowing(
+          loggedInUser.value._id
+        );
 
-      followUtils.appendIsBeingFollowedProperty(
-        following.value,
-        loggedInFollowing.value
-      );
+        followUtils.appendIsBeingFollowedProperty(
+          following.value,
+          loggedInFollowing.value
+        );
+      }
       hasComponentInitiallyLoaded.value = true;
     });
 

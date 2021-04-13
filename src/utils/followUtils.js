@@ -10,7 +10,7 @@ export default {
       } else {
         store.dispatch("addNotification", {
           type: "error",
-          message: "Something went wrong, try reloading again",
+          message: "Something went wrong: " + response.message,
         });
       }
       return [];
@@ -42,7 +42,7 @@ export default {
     } else {
       store.dispatch("addNotification", {
         type: "error",
-        message: "Something went wrong, try reloading again",
+        message: "Something went wrong: " + response.message,
       });
     }
   },
