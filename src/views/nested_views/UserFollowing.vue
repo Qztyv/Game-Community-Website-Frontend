@@ -102,33 +102,24 @@ export default {
     // they should be able to follow the users on that list, or unfollow them if they already follow them.
     // Due to reactivity of the following array, we can change the "isBeingFollowed" property
     // that we previously added, so that the follow/unfollow button for each user on the list is reflected accurately.
-    const alterFollowRelationShipResponse = ref(null);
-    const addFollowing = async (followingIndex) => {
-      const userToFollow = following.value[followingIndex];
-      alterFollowRelationShipResponse.value = await ProfileService.addFollowingToLoggedInUser(
-        userToFollow._id
+    const addFollowing = (followingIndex) => {
+      followUtils.addFollowing(
+        following.value,
+        followingIndex,
+        context,
+        props.userId,
+        loggedInUser.value._id
       );
-      if (alterFollowRelationShipResponse.value.status === "success") {
-        following.value[followingIndex].isBeingFollowed = true;
-        // if user on their own profile refollowing unfollowed people, we want the counter to reflect that
-        if (props.userId === loggedInUser.value._id) {
-          context.emit("incrementFollowingCounter");
-        }
-      }
     };
 
-    const removeFollowing = async (followingIndex) => {
-      const userToUnfollow = following.value[followingIndex];
-      alterFollowRelationShipResponse.value = await ProfileService.removeFollowingFromLoggedInUser(
-        userToUnfollow._id
+    const removeFollowing = (followingIndex) => {
+      followUtils.removeFollowing(
+        following.value,
+        followingIndex,
+        context,
+        props.userId,
+        loggedInUser.value._id
       );
-      if (alterFollowRelationShipResponse.value.status === 204) {
-        following.value[followingIndex].isBeingFollowed = false;
-        // if user on their own profile unfollowing people, we want the counter to reflect that
-        if (props.userId === loggedInUser.value._id) {
-          context.emit("decrementFollowingCounter");
-        }
-      }
     };
 
     return {

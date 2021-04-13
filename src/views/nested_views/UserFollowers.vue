@@ -11,25 +11,22 @@
         >
           {{ follower.name }}
         </router-link>
-        <div v-if="userId !== loggedInUser._id">
-          <div v-if="loggedInUser._id !== follower._id">
-            <button
-              v-if="!follower.isBeingFollowed"
-              @click="addFollowing(index)"
-            >
-              Follow
-            </button>
-            <button
-              v-if="follower.isBeingFollowed"
-              @click="removeFollowing(index)"
-            >
-              Unfollow
-            </button>
-          </div>
+
+        <div v-if="loggedInUser._id !== follower._id">
+          <button v-if="!follower.isBeingFollowed" @click="addFollowing(index)">
+            Follow
+          </button>
+          <button
+            v-if="follower.isBeingFollowed"
+            @click="removeFollowing(index)"
+          >
+            Unfollow
+          </button>
         </div>
+
         <!-- If user is on their own profile on their own followers page, they can remove
              people who follow them -->
-        <div v-else>
+        <div v-if="userId === loggedInUser._id">
           <button @click="removeFollower(index)">Remove</button>
         </div>
       </div>
@@ -79,20 +76,17 @@ export default {
     onBeforeMount(async () => {
       followers.value = await getProfileFollowers();
 
-      // users viewing their own profile will see a "remove" follower button instead
-      // of a follow/unfollow.
-      if (props.userId !== loggedInUser.value._id) {
-        // get logged in user following so we can compare against profile followers
-        // and allow our logged in user to follow / unfollow users they have also.
-        loggedInFollowing.value = await followUtils.getLoggedInFollowing(
-          loggedInUser.value._id
-        );
+      // get logged in user following so we can compare against profile followers
+      // and allow our logged in user to follow / unfollow users they have also.
+      loggedInFollowing.value = await followUtils.getLoggedInFollowing(
+        loggedInUser.value._id
+      );
 
-        followUtils.appendIsBeingFollowedProperty(
-          followers.value,
-          loggedInFollowing.value
-        );
-      }
+      followUtils.appendIsBeingFollowedProperty(
+        followers.value,
+        loggedInFollowing.value
+      );
+
       hasComponentInitiallyLoaded.value = true;
     });
 
@@ -110,42 +104,30 @@ export default {
       return [];
     };
 
-    // In the scenario that a logged in user is viewing another users profile and their followers,
-    // they should be able to follow the users on that list, or unfollow them if they already follow them.
-    // Due to reactivity of the followers array, we can change the "isBeingFollowed" property
-    // that we previously added, so that the follow/unfollow button for each user on the list is reflected accurately.
-    const alterFollowRelationShipResponse = ref(null);
-    const addFollowing = async (followerIndex) => {
-      const userToFollow = followers.value[followerIndex];
-      alterFollowRelationShipResponse.value = await ProfileService.addFollowingToLoggedInUser(
-        userToFollow._id
+    const addFollowing = (followerIndex) => {
+      followUtils.addFollowing(
+        followers.value,
+        followerIndex,
+        context,
+        props.userId,
+        loggedInUser.value._id
       );
-      if (alterFollowRelationShipResponse.value.status === "success") {
-        followers.value[followerIndex].isBeingFollowed = true;
-      }
     };
 
-    const removeFollowing = async (followerIndex) => {
-      const userToUnfollow = followers.value[followerIndex];
-      alterFollowRelationShipResponse.value = await ProfileService.removeFollowingFromLoggedInUser(
-        userToUnfollow._id
+    const removeFollowing = (followerIndex) => {
+      followUtils.removeFollowing(
+        followers.value,
+        followerIndex,
+        context,
+        props.userId,
+        loggedInUser.value._id
       );
-      if (alterFollowRelationShipResponse.value.status === 204) {
-        followers.value[followerIndex].isBeingFollowed = false;
-      }
     };
 
     // If user if viewing their own profile, they should be able to remove a follower
-    const removeFollower = async (followerIndex) => {
-      const followerToRemove = followers.value[followerIndex];
-      alterFollowRelationShipResponse.value = await ProfileService.removeFollowerFromLoggedInUser(
-        followerToRemove._id
-      );
-      if (alterFollowRelationShipResponse.value.status === 204) {
-        // remove the follower from the list, and decrement the counter to represent that
-        followers.value.splice(followerIndex, 1);
-        context.emit("decrementFollowerCounter");
-      }
+    // as well as follow them
+    const removeFollower = (followerIndex) => {
+      followUtils.removeFollower(followers.value, followerIndex, context);
     };
     return {
       hasComponentInitiallyLoaded,
