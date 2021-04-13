@@ -1,10 +1,13 @@
 <template>
   <div v-for="comment in comments" :key="comment.id">
     <h3>
-      <router-link
-        :to="{ name: 'PostSection', params: { id: comment.post.id } }"
-        >{{ comment.post.postTitle }}
-      </router-link>
+      <div v-if="comment.post">
+        <router-link
+          :to="{ name: 'PostSection', params: { id: comment.post.id } }"
+          >{{ comment.post.postTitle }}
+        </router-link>
+      </div>
+      <div v-else>Post Deleted</div>
     </h3>
     <Comment :comment="comment" />
     <p>Likes: {{ comment.likes }} Dislikes: {{ comment.dislikes }}</p>

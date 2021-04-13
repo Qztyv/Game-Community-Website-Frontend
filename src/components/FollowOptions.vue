@@ -44,7 +44,7 @@ export default {
     // There is too many edge cases to consider when using vuex for storing these things, just
     // to simply save calls to the database - it isnt worth it for now atleast.
     onBeforeMount(async () => {
-      getUserFollowingAndCheckIfFollowing(props.profileUserId);
+      await getUserFollowingAndCheckIfFollowing(props.profileUserId);
       hasComponentInitiallyLoaded.value = true;
     });
 

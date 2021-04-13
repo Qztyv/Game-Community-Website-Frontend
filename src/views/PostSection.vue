@@ -7,8 +7,12 @@
       <Post :post="post" />
       <div v-if="user._id === post.user._id">
         <router-link :to="{ name: 'UpdatePost', params: { id: post.id } }">
-          Update Your Post
+          Update Post
         </router-link>
+        <div v-if="deletePostResponse">
+          {{ deletePostResponse.message }}
+        </div>
+        <a href="#" @click="deletePost">Delete Post</a>
       </div>
       <div id="add-comment">
         <!-- Can add 2 paths here, one for logged in users and one for non-logged in users - to get rid of the text box -->
@@ -63,6 +67,7 @@ import FeedService from "@/services/FeedService.js";
 import Loader from "@/components/Loader";
 import CommentFeed from "@/components/CommentFeed";
 import SortFeedButtons from "@/components/SortFeedButtons";
+import { useRouter } from "vue-router";
 export default {
   components: {
     Post,
@@ -78,6 +83,8 @@ export default {
   },
   setup(props) {
     const store = useStore();
+    const router = useRouter();
+
     const user = computed(() => store.state.user);
 
     const hasComponentInitiallyLoaded = ref(false);
@@ -122,6 +129,19 @@ export default {
       sortId.value++;
     };
 
+    let deletePostResponse = ref(null);
+    const deletePost = async () => {
+      deletePostResponse.value = await FeedService.deletePost(props.id);
+
+      if (deletePostResponse.value.status === 204) {
+        store.dispatch("addNotification", {
+          type: "success",
+          message: "Post Deleted!",
+        });
+        router.push({ name: "Login" });
+      }
+    };
+
     return {
       user,
       hasComponentInitiallyLoaded,
@@ -134,6 +154,8 @@ export default {
       sortId,
       sortBy,
       updateFeedSortBy,
+      deletePostResponse,
+      deletePost,
     };
   },
 };

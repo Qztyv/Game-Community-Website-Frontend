@@ -34,6 +34,15 @@ export default {
     }
     return response;
   },
+  async deletePost(postId) {
+    let response;
+    try {
+      response = await apiClient.delete(`posts/${postId}`);
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async getPost(postId) {
     let response;
     try {
