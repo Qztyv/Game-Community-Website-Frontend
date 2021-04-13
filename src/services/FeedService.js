@@ -94,6 +94,15 @@ export default {
     }
     return response;
   },
+  async deleteComment(commentId) {
+    let response;
+    try {
+      response = await apiClient.delete(`comments/${commentId}`);
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async getUser(userId) {
     let response;
     try {

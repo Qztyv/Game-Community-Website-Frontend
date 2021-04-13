@@ -1,7 +1,13 @@
 <template>
-  <div v-for="comment in comments" :key="comment.id">
+  <div v-for="(comment, index) in comments" :key="comment.id">
     <Comment :comment="comment" />
     <Vote :document="comment" documentType="comment" />
+    <div v-if="loggedInUser._id === comment.user._id">
+      <div v-if="deleteCommentResponse">
+        {{ deleteCommentResponse.message }}
+      </div>
+      <button @click="deleteComment(index)">Delete Comment</button>
+    </div>
   </div>
   <div v-if="isLoading">
     <Loader />
@@ -16,11 +22,12 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import FeedService from "@/services/FeedService.js";
 import Comment from "@/components/Comment";
 import Loader from "@/components/Loader";
 import Vote from "@/components/Vote";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -43,13 +50,17 @@ export default {
     },
   },
   async setup(props) {
-    const comments = ref([]);
     watch(
       () => props.newComment,
       (newValue) => {
         comments.value.unshift(newValue);
       }
     );
+
+    const store = useStore();
+    const loggedInUser = computed(() => store.state.user);
+
+    const comments = ref([]);
 
     const responseResults = ref(-1);
     const limit = 10;
@@ -72,6 +83,18 @@ export default {
         console.log(response.value);
         comments.value = [...comments.value, ...response.value.data.data];
         responseResults.value = response.value.results;
+      }
+    };
+
+    const deleteCommentResponse = ref(null);
+    const deleteComment = async (commentIndex) => {
+      let commentToDelete = comments.value[commentIndex];
+
+      deleteCommentResponse.value = await FeedService.deleteComment(
+        commentToDelete.id
+      );
+      if (deleteCommentResponse.value.status === 204) {
+        comments.value.splice(commentIndex, 1);
       }
     };
 
@@ -102,11 +125,14 @@ export default {
 
     await fetchComments();
     return {
+      loggedInUser,
       comments,
       isLoading,
       responseResults,
       response,
       handleManualFetch,
+      deleteCommentResponse,
+      deleteComment,
     };
   },
 };
