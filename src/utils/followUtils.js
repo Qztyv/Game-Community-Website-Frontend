@@ -5,9 +5,10 @@ export default {
   async getLoggedInFollowing(userId) {
     {
       let response = await ProfileService.getUserFollowing(userId);
-      if (response.status === "success" && response.data.data.length) {
-        return response.data.data[0].following;
+      if (response.status === "success") {
+        return response.data.data[0]?.following;
       } else {
+        console.log("hit here");
         store.dispatch("addNotification", {
           type: "error",
           message: "Something went wrong: " + response.message,

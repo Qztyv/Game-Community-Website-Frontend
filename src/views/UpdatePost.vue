@@ -91,7 +91,7 @@ export default {
       await getPost();
       postTitle.value = post.value.postTitle;
       oldPostImage.value = post.value.image;
-      postContent.value = post.value.postContent;
+      postContent.value = post.value.postContent || null;
       hasComponentInitiallyLoaded.value = true;
     });
 

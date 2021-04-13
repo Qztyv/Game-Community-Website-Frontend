@@ -83,10 +83,12 @@ export default {
           loggedInUser.value._id
         );
 
-        followUtils.appendIsBeingFollowedProperty(
-          following.value,
-          loggedInFollowing.value
-        );
+        if (loggedInFollowing.value != undefined) {
+          followUtils.appendIsBeingFollowedProperty(
+            following.value,
+            loggedInFollowing.value
+          );
+        }
       }
       hasComponentInitiallyLoaded.value = true;
     });
