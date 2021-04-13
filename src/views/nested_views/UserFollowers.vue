@@ -12,7 +12,12 @@
           {{ follower.name }}
         </router-link>
 
-        <div v-if="loggedInUser._id !== follower._id">
+        <div
+          v-if="
+            loggedInUser._id !== follower._id &&
+            Object.keys(loggedInUser).length
+          "
+        >
           <button v-if="!follower.isBeingFollowed" @click="addFollowing(index)">
             Follow
           </button>
