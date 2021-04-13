@@ -2,7 +2,7 @@
   <div v-if="profileFollowersResponse">
     {{ profileFollowersResponse.message }}
   </div>
-  <h2>List of Followers</h2>
+  <h2>List of Active Followers</h2>
   <div v-if="hasComponentInitiallyLoaded">
     <div class="follower-list">
       <div v-for="(follower, index) in followers" :key="follower._id">
@@ -35,7 +35,7 @@
           <button @click="removeFollower(index)">Remove</button>
         </div>
       </div>
-      <p v-if="!followers.length">This user has no followers ;(</p>
+      <p v-if="!followers.length">This user has no activated followers ;(</p>
     </div>
   </div>
   <div v-else>

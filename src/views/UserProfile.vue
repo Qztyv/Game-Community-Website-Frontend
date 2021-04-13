@@ -15,13 +15,13 @@
             <router-link
               :to="{ name: 'UserFollowers', params: { userId: userId } }"
             >
-              followers: {{ user.followers }}</router-link
+              Total Followers: {{ user.followers }}</router-link
             >
           </div>
           <div class="following">
             <router-link
               :to="{ name: 'UserFollowing', params: { userId: userId } }"
-              >following: {{ user.following }}</router-link
+              >Total Following: {{ user.following }}</router-link
             >
           </div>
         </div>
