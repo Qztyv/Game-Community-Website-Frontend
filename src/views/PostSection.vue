@@ -5,6 +5,11 @@
     </div>
     <div v-if="post" id="post">
       <Post :post="post" />
+      <div v-if="user._id === post.user._id">
+        <router-link :to="{ name: 'UpdatePost', params: { id: post.id } }">
+          Update Your Post
+        </router-link>
+      </div>
       <div id="add-comment">
         <!-- Can add 2 paths here, one for logged in users and one for non-logged in users - to get rid of the text box -->
         <div v-if="!Object.keys(user).length">
@@ -84,7 +89,6 @@ export default {
       if (postResponse.value.status === "success") {
         post.value = postResponse.value.data.data;
       }
-      console.log(postResponse.value);
     };
 
     onBeforeMount(async () => {
@@ -100,7 +104,6 @@ export default {
         content: comment.value,
       });
       if (commentResponse.value.status === "success") {
-        console.log("comment added");
         newComment.value = {
           content: commentResponse.value.data.data.content,
           createdAt: commentResponse.value.data.data.createdAt,

@@ -24,6 +24,16 @@ export default {
     }
     return response;
   },
+  async updatePost(postId, postForm) {
+    let response;
+    try {
+      response = await apiClient.patch(`posts/${postId}`, postForm);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async getPost(postId) {
     let response;
     try {

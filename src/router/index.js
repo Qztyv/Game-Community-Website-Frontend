@@ -16,6 +16,8 @@ import UserComments from "@/views/nested_views/UserComments.vue";
 import FollowingPosts from "@/views/FollowingPosts.vue";
 import UserFollowers from "@/views/nested_views/UserFollowers.vue";
 import UserFollowing from "@/views/nested_views/UserFollowing.vue";
+import CreatePost from "@/views/CreatePost.vue";
+import UpdatePost from "@/views/UpdatePost.vue";
 
 const requireAuth = (to, from, next) => {
   if (!Object.keys(store.state.user).length) {
@@ -102,6 +104,19 @@ const routes = [
     path: "/post/:id",
     name: "PostSection",
     component: PostSection,
+    props: true,
+  },
+  {
+    path: "/post/create",
+    name: "CreatePost",
+    component: CreatePost,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/post/:id/update",
+    name: "UpdatePost",
+    component: UpdatePost,
+    beforeEnter: requireAuth,
     props: true,
   },
   {

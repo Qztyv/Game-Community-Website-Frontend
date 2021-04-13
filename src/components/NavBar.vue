@@ -6,6 +6,7 @@
     <router-link to="/signup">Sign Up</router-link>
   </div>
   <div id="nav" v-else>
+    <router-link to="/post/create">Create A Post</router-link> |
     <router-link to="/">All Posts</router-link> |
     <router-link to="/following-feed">Following Feed</router-link> |
     <router-link to="/about">About</router-link> |
