@@ -7,9 +7,9 @@
       >
         {{ post.user.name }}
       </router-link>
-      {{ generalCreatedAt }}
     </span>
     <span v-else> [deleted] </span>
+    {{ generalCreatedAt }}
   </div>
   <div class="content">
     <h1>{{ post.postTitle }}</h1>

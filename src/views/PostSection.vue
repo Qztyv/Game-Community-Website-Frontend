@@ -5,7 +5,7 @@
     </div>
     <div v-if="post" id="post">
       <Post :post="post" />
-      <div v-if="user._id === post.user._id">
+      <div v-if="post.user && user._id === post.user._id">
         <router-link :to="{ name: 'UpdatePost', params: { id: post.id } }">
           Update Post
         </router-link>
