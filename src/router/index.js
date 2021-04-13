@@ -5,8 +5,6 @@ import Signup from "@/views/Signup.vue";
 import Login from "@/views/Login.vue";
 import Settings from "@/views/Settings.vue";
 import PageNotFound from "@/views/PageNotFound.vue";
-import Account from "@/views/nested_views/Account.vue";
-import Profile from "@/views/nested_views/Profile.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import PostSection from "@/views/PostSection.vue";
@@ -85,20 +83,6 @@ const routes = [
     name: "Settings",
     component: Settings,
     beforeEnter: requireAuth,
-    children: [
-      {
-        path: "account",
-        component: Account,
-      },
-      {
-        path: "profile",
-        component: Profile,
-      },
-      {
-        path: "",
-        component: Account,
-      },
-    ],
   },
   {
     path: "/post/:id",
