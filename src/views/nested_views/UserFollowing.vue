@@ -9,7 +9,12 @@
         <router-link
           :to="{ name: 'UserProfile', params: { userId: followingUser._id } }"
         >
-          {{ followingUser.name }}
+          <span v-if="followingUser.banned">
+            <del>{{ followingUser.name }}</del>
+          </span>
+          <span v-else>
+            {{ followingUser.name }}
+          </span>
         </router-link>
         <div
           v-if="
@@ -109,28 +114,37 @@ export default {
       return [];
     };
 
+    let processLocker = false;
     // In the scenario that a logged in user is viewing another users profile and their following,
     // they should be able to follow the users on that list, or unfollow them if they already follow them.
     // Due to reactivity of the following array, we can change the "isBeingFollowed" property
     // that we previously added, so that the follow/unfollow button for each user on the list is reflected accurately.
-    const addFollowing = (followingIndex) => {
-      followUtils.addFollowing(
-        following.value,
-        followingIndex,
-        context,
-        props.userId,
-        loggedInUser.value._id
-      );
+    const addFollowing = async (followingIndex) => {
+      if (!processLocker) {
+        processLocker = true;
+        await followUtils.addFollowing(
+          following.value,
+          followingIndex,
+          context,
+          props.userId,
+          loggedInUser.value._id
+        );
+        processLocker = false;
+      }
     };
 
-    const removeFollowing = (followingIndex) => {
-      followUtils.removeFollowing(
-        following.value,
-        followingIndex,
-        context,
-        props.userId,
-        loggedInUser.value._id
-      );
+    const removeFollowing = async (followingIndex) => {
+      if (!processLocker) {
+        processLocker = true;
+        await followUtils.removeFollowing(
+          following.value,
+          followingIndex,
+          context,
+          props.userId,
+          loggedInUser.value._id
+        );
+        processLocker = false;
+      }
     };
 
     return {

@@ -61,23 +61,33 @@ export default {
       isFollowing.value = following.some((userEl) => userEl._id === userId);
     };
 
+    let processLocker = false;
+
     const response = ref(null);
     const addFollowing = async () => {
-      response.value = await ProfileService.addFollowingToLoggedInUser(
-        props.profileUserId
-      );
-      if (response.value.status === "success") {
-        isFollowing.value = true;
-        context.emit("incrementFollowerCounter");
+      if (!processLocker) {
+        processLocker = true;
+        response.value = await ProfileService.addFollowingToLoggedInUser(
+          props.profileUserId
+        );
+        if (response.value.status === "success") {
+          isFollowing.value = true;
+          context.emit("incrementFollowerCounter");
+        }
+        processLocker = false;
       }
     };
     const removeFollowing = async () => {
-      response.value = await ProfileService.removeFollowingFromLoggedInUser(
-        props.profileUserId
-      );
-      if (response.value.status === 204) {
-        isFollowing.value = false;
-        context.emit("decrementFollowerCounter");
+      if (!processLocker) {
+        processLocker = true;
+        response.value = await ProfileService.removeFollowingFromLoggedInUser(
+          props.profileUserId
+        );
+        if (response.value.status === 204) {
+          isFollowing.value = false;
+          context.emit("decrementFollowerCounter");
+        }
+        processLocker = false;
       }
     };
     return {

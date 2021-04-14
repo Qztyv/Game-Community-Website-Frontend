@@ -89,7 +89,7 @@ export default {
       const form = new FormData();
       form.append("name", name.value);
       form.append("email", email.value);
-      form.append("photo", file.value.target.files[0]);
+      form.append("photo", file.value.target?.files[0]);
       response.value = await AuthService.updateAccount(form);
       if (response.value.status === "success") {
         store.dispatch("addNotification", {
@@ -97,7 +97,7 @@ export default {
           message: "Details Updated Successfully!",
         });
         store.dispatch("storeUser", response.value.data.user);
-        file.value.target.value = "";
+        if (file.value.target) file.value.target.value = "";
       }
     };
 

@@ -9,6 +9,7 @@
         <p>
           {{ user.name }}
           <span v-if="user.role === 'admin'"> - Admin</span>
+          <span v-if="user.banned"> - Banned</span>
         </p>
         <div class="follow-stats">
           <div class="followers">
@@ -36,6 +37,29 @@
             @decrementFollowerCounter="user.followers--"
           />
         </div>
+        <div
+          class="admin-options"
+          v-if="loggedInUser.role === 'admin' && loggedInUser._id !== user._id"
+        >
+          <div v-if="adminOptionResponse">
+            {{ adminOptionResponse.message }}
+          </div>
+          <p v-if="user.banned">Hidden Ban Reason: {{ user.banReason }}</p>
+          Admin Options:
+          <button v-if="!user.banned" @click="openBanForm = !openBanForm">
+            Ban
+          </button>
+          <button v-else @click="unbanUser">Unban</button>
+          <div class="ban-form" v-if="openBanForm">
+            <form @submit.prevent="banUser">
+              <label for="banReason">Enter the ban reason</label>
+              <textarea id="banReason" maxlength="300" v-model="banReason">
+                Reason (optional)
+              </textarea>
+              <button type="submit">Ban User</button>
+            </form>
+          </div>
+        </div>
       </div>
       <div id="chosen_feed">
         <router-link :to="{ name: 'UserPosts', params: { userId: userId } }"
@@ -45,10 +69,6 @@
         <router-link :to="{ name: 'UserComments', params: { userId: userId } }"
           >All Comments</router-link
         >
-        <!-- <div id="own_user" v-if="loggedInUser._id === user._id">
-        | <router-link to="/user/post-votes">Voted Posts</router-link> |
-        <router-link to="/user/comment-votes">Voted Comments</router-link>
-      </div> -->
       </div>
       <router-view
         :userId="userId"
@@ -69,6 +89,7 @@ import { useStore } from "vuex";
 import FeedService from "@/services/FeedService.js";
 import FollowOptions from "@/components/FollowOptions";
 import Loader from "@/components/Loader";
+import ProfileService from "../services/ProfileService";
 export default {
   components: {
     FollowOptions,
@@ -110,11 +131,42 @@ export default {
       hasComponentInitiallyLoaded.value = true;
     });
 
+    const openBanForm = ref(false);
+    const banReason = ref(null);
+
+    const adminOptionResponse = ref(null);
+    const banUser = async () => {
+      if (!banReason.value || banReason.value.trim() === "") {
+        banReason.value = "No Reason";
+      }
+      adminOptionResponse.value = await ProfileService.banUser(props.userId, {
+        banReason: banReason.value,
+      });
+
+      if (adminOptionResponse.value.status === "success") {
+        user.value.banned = true;
+        openBanForm.value = false;
+        user.value.banReason = banReason.value;
+        banReason.value = null;
+      }
+    };
+
+    const unbanUser = async () => {
+      adminOptionResponse.value = await ProfileService.unbanUser(props.userId);
+      if (adminOptionResponse.value.status === "success") {
+        user.value.banned = false;
+      }
+    };
     return {
       response,
       hasComponentInitiallyLoaded,
       user,
       loggedInUser,
+      openBanForm,
+      banReason,
+      banUser,
+      adminOptionResponse,
+      unbanUser,
     };
   },
 };

@@ -9,7 +9,12 @@
         <router-link
           :to="{ name: 'UserProfile', params: { userId: follower._id } }"
         >
-          {{ follower.name }}
+          <span v-if="follower.banned">
+            <del>{{ follower.name }}</del>
+          </span>
+          <span v-else>
+            {{ follower.name }}
+          </span>
         </router-link>
 
         <div
@@ -112,30 +117,48 @@ export default {
       return [];
     };
 
-    const addFollowing = (followerIndex) => {
-      followUtils.addFollowing(
-        followers.value,
-        followerIndex,
-        context,
-        props.userId,
-        loggedInUser.value._id
-      );
+    let processLocker = false;
+
+    const addFollowing = async (followerIndex) => {
+      if (!processLocker) {
+        processLocker = true;
+        await followUtils.addFollowing(
+          followers.value,
+          followerIndex,
+          context,
+          props.userId,
+          loggedInUser.value._id
+        );
+        processLocker = false;
+      }
     };
 
-    const removeFollowing = (followerIndex) => {
-      followUtils.removeFollowing(
-        followers.value,
-        followerIndex,
-        context,
-        props.userId,
-        loggedInUser.value._id
-      );
+    const removeFollowing = async (followerIndex) => {
+      if (!processLocker) {
+        processLocker = true;
+        await followUtils.removeFollowing(
+          followers.value,
+          followerIndex,
+          context,
+          props.userId,
+          loggedInUser.value._id
+        );
+        processLocker = false;
+      }
     };
 
     // If user if viewing their own profile, they should be able to remove a follower
     // as well as follow them
-    const removeFollower = (followerIndex) => {
-      followUtils.removeFollower(followers.value, followerIndex, context);
+    const removeFollower = async (followerIndex) => {
+      if (!processLocker) {
+        processLocker = true;
+        await followUtils.removeFollower(
+          followers.value,
+          followerIndex,
+          context
+        );
+        processLocker = false;
+      }
     };
     return {
       hasComponentInitiallyLoaded,
