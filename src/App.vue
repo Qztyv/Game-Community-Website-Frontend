@@ -33,7 +33,7 @@ export default {
   padding: 0%;
   margin: 0%;
 }
-img {
+.profile-image {
   border-radius: 50%;
 }
 

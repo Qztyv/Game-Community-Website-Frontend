@@ -33,8 +33,14 @@
   <li>
     <router-link :to="{ name: 'UserProfile', params: { userId: user._id } }">
       Profile
-      <div class="profile-image">
-        <img :src="user.photo" alt="Profile Photo" width="50" height="50" />
+      <div class="profile-image-container">
+        <img
+          :src="user.photo"
+          alt="Profile Photo"
+          width="50"
+          height="50"
+          class="profile-image"
+        />
       </div>
     </router-link>
   </li>
@@ -88,7 +94,7 @@ export default {
 </script>
 
 <style scoped>
-.profile-image {
+.profile-image-container {
   float: right;
   padding-left: 10px;
   margin-top: 5px;
