@@ -127,11 +127,15 @@ export default {
   color: #2c3e50;
   text-decoration: none;
 }
+
 .post {
-  padding: 20px;
-  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  width: 85%;
+  position: relative;
   border: 1px solid #39495c;
-  margin-bottom: 18px;
+  cursor: pointer;
 }
 
 .post:hover {

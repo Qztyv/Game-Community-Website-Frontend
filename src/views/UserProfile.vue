@@ -5,7 +5,13 @@
   <div v-if="hasComponentInitiallyLoaded">
     <div v-if="user">
       <div id="user-profile">
-        <img :src="user.photo" alt="Profile Photo" width="50" height="50" />
+        <img
+          :src="user.photo"
+          alt="Profile Photo"
+          width="50"
+          height="50"
+          class="profile-image"
+        />
         <p>
           {{ user.name }}
           <span v-if="user.role === 'admin'"> - Admin</span>

@@ -5,12 +5,19 @@
 </template>
 
 <script>
+import M from "materialize-css";
 import NotificationContainer from "@/components/NotificationContainer";
 import NavBar from "@/components/NavBar";
+import { onMounted } from "vue";
 export default {
   components: {
     NotificationContainer,
     NavBar,
+  },
+  setup() {
+    onMounted(() => {
+      M.AutoInit();
+    });
   },
 };
 </script>
@@ -21,19 +28,62 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+}
+* {
+  padding: 0%;
+  margin: 0%;
+}
+.profile-image {
+  border-radius: 50%;
 }
 
-#nav {
-  padding: 30px;
+form {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  width: 40%;
+  display: block;
+  text-align: left;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+@media only screen and (max-width: 992px) {
+  form {
+    width: 80%;
+  }
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+a.router-link-exact-active {
+  cursor: default;
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+.noSelect {
+  cursor: default;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+::-moz-selection {
+  background: #c9e2ff85;
+}
+::selection {
+  background: #c9e2ff85;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #6f8691;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6b808b;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #546e7a;
 }
 </style>

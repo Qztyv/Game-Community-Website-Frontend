@@ -20,7 +20,11 @@
     <h1>{{ post.postTitle }}</h1>
     <div class="post-image" v-if="post.image">
       <!-- could make image responsive with materialize -->
-      <img :src="post.image" alt="Post Image" width="750" height="500" />
+      <img
+        :src="post.image"
+        alt="Post Image"
+        class="responsive-img z-depth-2"
+      />
     </div>
     <p v-if="post.postContent">{{ post.postContent }}</p>
   </div>
@@ -54,4 +58,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.responsive-img {
+  max-height: 520px;
+}
+</style>
