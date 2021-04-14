@@ -5,15 +5,22 @@
     </div>
     <div v-if="post" id="post">
       <Post :post="post" />
-      <div v-if="user._id === post.user._id">
+      <div v-if="post.user && user._id === post.user._id">
         <router-link :to="{ name: 'UpdatePost', params: { id: post.id } }">
           Update Post
         </router-link>
-        <div v-if="deletePostResponse">
-          {{ deletePostResponse.message }}
-        </div>
+      </div>
+      <div v-if="deletePostResponse">
+        {{ deletePostResponse.message }}
+      </div>
+      <div
+        v-if="
+          user.role === 'admin' || (post.user && user._id === post.user._id)
+        "
+      >
         <a href="#" @click="deletePost">Delete Post</a>
       </div>
+
       <div id="add-comment">
         <!-- Can add 2 paths here, one for logged in users and one for non-logged in users - to get rid of the text box -->
         <div v-if="!Object.keys(user).length">
@@ -86,7 +93,7 @@ export default {
     const router = useRouter();
 
     const user = computed(() => store.state.user);
-
+    console.log(user.value);
     const hasComponentInitiallyLoaded = ref(false);
 
     const postResponse = ref(null);

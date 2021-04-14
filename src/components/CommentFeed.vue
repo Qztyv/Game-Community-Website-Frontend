@@ -2,7 +2,12 @@
   <div v-for="(comment, index) in comments" :key="comment.id">
     <Comment :comment="comment" />
     <Vote :document="comment" documentType="comment" />
-    <div v-if="loggedInUser._id === comment.user._id">
+    <div
+      v-if="
+        loggedInUser.role === 'admin' ||
+        (comment.user && loggedInUser._id === comment.user._id)
+      "
+    >
       <div v-if="deleteCommentResponse">
         {{ deleteCommentResponse.message }}
       </div>

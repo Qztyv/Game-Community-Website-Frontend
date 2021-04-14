@@ -8,10 +8,9 @@ export default {
       if (response.status === "success") {
         return response.data.data[0]?.following;
       } else {
-        console.log("hit here");
         store.dispatch("addNotification", {
           type: "error",
-          message: "Something went wrong: " + response.message,
+          message: "Error: " + response.message,
         });
       }
       return [];
@@ -43,7 +42,7 @@ export default {
     } else {
       store.dispatch("addNotification", {
         type: "error",
-        message: "Something went wrong: " + response.message,
+        message: "Error: " + response.message,
       });
     }
   },
@@ -58,6 +57,11 @@ export default {
       if (profileUserId === loggedInUserId) {
         context.emit("decrementFollowingCounter");
       }
+    } else {
+      store.dispatch("addNotification", {
+        type: "error",
+        message: "Error: " + response.message,
+      });
     }
   },
   async removeFollower(array, index, context) {
@@ -69,6 +73,11 @@ export default {
       // remove the follower from the list, and decrement the counter to represent that
       array.splice(index, 1);
       context.emit("decrementFollowerCounter");
+    } else {
+      store.dispatch("addNotification", {
+        type: "error",
+        message: "Error: " + response.message,
+      });
     }
   },
 };

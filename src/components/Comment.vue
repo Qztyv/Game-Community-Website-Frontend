@@ -4,7 +4,12 @@
       <router-link
         :to="{ name: 'UserProfile', params: { userId: comment.user._id } }"
       >
-        {{ comment.user.name }}
+        <span v-if="comment.user.banned">
+          <del>{{ comment.user.name }}</del>
+        </span>
+        <span v-else>
+          {{ comment.user.name }}
+        </span>
       </router-link>
     </span>
     <span v-else> [deleted] </span>

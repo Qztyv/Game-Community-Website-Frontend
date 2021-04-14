@@ -56,4 +56,24 @@ export default {
     }
     return response;
   },
+  async banUser(UserId, banForm) {
+    let response;
+    try {
+      response = await apiClient.patch(`users/${UserId}/ban`, banForm);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async unbanUser(UserId) {
+    let response;
+    try {
+      response = await apiClient.patch(`users/${UserId}/unban`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
 };
