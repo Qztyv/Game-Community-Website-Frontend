@@ -10,3 +10,9 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+.card {
+  margin-top: 0px;
+}
+</style>

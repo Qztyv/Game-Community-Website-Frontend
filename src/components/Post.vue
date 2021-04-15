@@ -21,8 +21,8 @@
       <span v-else> [deleted] </span>
       {{ generalCreatedAt }}
     </div>
-    <div class="content">
-      <h4>{{ post.postTitle }}</h4>
+    <div class="post-content">
+      <h4 class="post-content-title title-line">{{ post.postTitle }}</h4>
       <div class="post-image" v-if="post.image">
         <!-- could make image responsive with materialize -->
         <img
@@ -31,7 +31,9 @@
           class="responsive-img z-depth-2"
         />
       </div>
-      <p v-if="post.postContent">{{ post.postContent }}</p>
+      <p v-if="post.postContent" class="post-content-text">
+        {{ post.postContent }}
+      </p>
     </div>
     <div class="options">
       <Vote :document="post" documentType="post" />
@@ -72,9 +74,6 @@ export default {
 </script>
 
 <style scoped>
-.responsive-img {
-  max-height: 520px;
-}
 .post {
   margin-left: auto;
   margin-right: auto;
@@ -90,6 +89,34 @@ export default {
   text-align: right;
   margin: 0px;
 }
+
+.post-content {
+  text-align: left;
+}
+
+.post-content-title {
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+.title-line {
+  border-bottom: 1px solid #dfdfdd;
+}
+
+.post-image {
+  text-align: center;
+}
+
+.responsive-img {
+  max-height: 520px;
+  text-align: center;
+}
+
+.post-content-text {
+  padding-left: 10px;
+}
+
 .user-name:hover {
   text-decoration: underline;
 }

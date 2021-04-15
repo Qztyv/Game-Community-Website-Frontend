@@ -2,28 +2,28 @@
   <div class="sort-options row">
     <button
       @click="sortBy('Newest')"
-      class="button waves-effect waves-light btn-small blue"
+      class="button waves-effect waves-light btn-small blue-grey"
       v-bind:class="{ 'darken-3': currentSort === 'Newest' }"
     >
       Newest
     </button>
     <button
       @click="sortBy('Oldest')"
-      class="button waves-effect waves-light btn-small blue"
+      class="button waves-effect waves-light btn-small blue-grey"
       v-bind:class="{ 'darken-3': currentSort === 'Oldest' }"
     >
       Oldest
     </button>
     <button
       @click="sortBy('Highest Like Percentage')"
-      class="button waves-effect waves-light btn-small blue"
+      class="button waves-effect waves-light btn-small blue-grey"
       v-bind:class="{ 'darken-3': currentSort === 'Highest Like Percentage' }"
     >
       Like %
     </button>
     <button
       @click="sortBy('Most Likes')"
-      class="button waves-effect waves-light btn-small blue"
+      class="button waves-effect waves-light btn-small blue-grey"
       v-bind:class="{ 'darken-3': currentSort === 'Most Likes' }"
     >
       Most Likes

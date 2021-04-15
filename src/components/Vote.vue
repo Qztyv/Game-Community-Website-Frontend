@@ -3,7 +3,7 @@
     {{ response.message }}
   </div>
   <button
-    class="button waves-effect waves-light btn-small blue-grey lighten-1"
+    class="button waves-effect waves-light btn-small blue-grey"
     @click="
       direction === 1
         ? setVoteDirection(0, direction)
@@ -18,7 +18,7 @@
     {{ likes }}
   </button>
   <button
-    class="button waves-effect waves-light btn-small blue-grey lighten-1"
+    class="button waves-effect waves-light btn-small blue-grey"
     @click="
       direction === -1
         ? setVoteDirection(0, direction)

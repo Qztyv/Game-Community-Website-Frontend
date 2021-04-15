@@ -34,6 +34,7 @@
       </button>
     </div>
   </form>
+  <router-link to="/login">Back to Login</router-link>
 </template>
 
 <script>
