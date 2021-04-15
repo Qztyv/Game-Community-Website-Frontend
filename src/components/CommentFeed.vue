@@ -1,5 +1,9 @@
 <template>
-  <div v-for="(comment, index) in comments" :key="comment.id">
+  <div
+    v-for="(comment, index) in comments"
+    :key="comment.id"
+    class="comment-block"
+  >
     <Comment :comment="comment" />
     <Vote :document="comment" documentType="comment" />
     <div
@@ -18,7 +22,13 @@
     <Loader />
   </div>
   <div v-if="responseResults !== 0">
-    <button @click="handleManualFetch">Fetch more comments</button>
+    <button
+      @click="handleManualFetch"
+      class="waves-effect waves-light btn-small blue-grey"
+    >
+      <i class="material-icons left">refresh</i>
+      Fetch more comments
+    </button>
   </div>
   <div v-if="responseResults === 0">No more comments left on this post!</div>
   <div v-if="response">
@@ -143,4 +153,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.comment-block {
+  padding-bottom: 10px;
+}
+</style>

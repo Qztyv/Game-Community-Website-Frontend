@@ -13,7 +13,7 @@
   <div v-if="responseResults !== 0">
     <button
       @click="handleManualFetch"
-      class="waves-effect waves-light btn-small blue-grey lighten-1"
+      class="waves-effect waves-light btn-small blue-grey"
     >
       <i class="material-icons left">refresh</i>Fetch more posts
     </button>

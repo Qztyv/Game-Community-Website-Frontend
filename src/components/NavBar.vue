@@ -97,6 +97,9 @@ export default {
 }
 
 .user-items {
-  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.non-user {
+  padding-bottom: 10px;
 }
 </style>

@@ -1,17 +1,17 @@
 <template>
   <div v-if="hasComponentInitiallyLoaded">
-    <div v-if="postResponse">
-      {{ postResponse.message }}
+    <div v-if="postResponse?.message" class="white-text card-panel red">
+      <span>{{ postResponse.message }}</span>
     </div>
-    <div v-if="post" id="post">
+    <div v-if="post" id="post-section">
       <Post :post="post" />
       <div v-if="post.user && user._id === post.user._id">
         <router-link :to="{ name: 'UpdatePost', params: { id: post.id } }">
           Update Post
         </router-link>
       </div>
-      <div v-if="deletePostResponse">
-        {{ deletePostResponse.message }}
+      <div v-if="deletePostResponse?.message" class="white-text card-panel red">
+        <span>{{ deletePostResponse.message }}</span>
       </div>
       <div
         v-if="
@@ -27,21 +27,33 @@
           <p>Login or Sign-up to leave a comment</p>
         </div>
         <div v-else>
-          <div v-if="commentResponse">
-            {{ commentResponse.message }}
-          </div>
-          <p>Comment as {{ user.name }}</p>
-          <form @submit.prevent="addComment">
-            <textarea
-              type="text"
-              id="postContent"
-              placeholder="What are your thoughts?"
-              v-model="comment"
-              maxlength="3000"
-              minlength="1"
-              required
-            />
-            <button type="submit">Add Comment</button>
+          <form @submit.prevent="addComment" class="comment-form">
+            <div
+              v-if="commentResponse?.message"
+              class="white-text card-panel red"
+            >
+              <span>{{ commentResponse.message }}</span>
+            </div>
+
+            <div class="input-wrapper">
+              <label for="postContent">Comment as {{ user.name }}</label>
+              <textarea
+                type="text"
+                id="postContent"
+                placeholder="What are your thoughts?"
+                v-model="comment"
+                maxlength="3000"
+                minlength="1"
+                class="materialize-textarea"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="waves-effect waves-light btn-small blue-grey lighten-1"
+            >
+              Comment
+            </button>
           </form>
         </div>
       </div>
@@ -168,4 +180,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+form {
+  margin-top: 10px;
+}
+
+.comment-form {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 85%;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+</style>
