@@ -1,5 +1,5 @@
 <template>
-  <div class="post" v-for="post in posts" :key="post.id">
+  <div v-for="post in posts" :key="post.id">
     <router-link
       class="post-link"
       :to="{ name: 'PostSection', params: { id: post.id } }"
@@ -11,7 +11,12 @@
     <Loader />
   </div>
   <div v-if="responseResults !== 0">
-    <button @click="handleManualFetch">Fetch more posts</button>
+    <button
+      @click="handleManualFetch"
+      class="waves-effect waves-light btn-small blue-grey lighten-1"
+    >
+      <i class="material-icons left">refresh</i>Fetch more posts
+    </button>
   </div>
   <div v-if="responseResults === 0">No more posts left in the feed!</div>
   <div v-if="response">
@@ -124,22 +129,19 @@ export default {
 
 <style scoped>
 .post-link {
-  color: #2c3e50;
+  color: #222222;
   text-decoration: none;
-}
-
-.post {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
-  width: 85%;
-  position: relative;
-  border: 1px solid #39495c;
-  cursor: pointer;
 }
 
 .post:hover {
   transform: scale(1.01);
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
+}
+.post {
+  cursor: pointer;
+}
+
+i.left {
+  margin-right: 5px;
 }
 </style>

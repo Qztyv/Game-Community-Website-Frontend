@@ -1,18 +1,21 @@
 <template>
-  <div class="home">
-    <div id="home-feed">
-      <h2>Feed of All Posts</h2>
-      <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
-      <div>
-        <Suspense>
-          <template #default>
-            <PostFeed :sort="sortBy" :key="sortId" feedType="All" />
-          </template>
-          <template #fallback>
-            <Loader />
-          </template>
-        </Suspense>
-      </div>
+  <PageBanner>
+    <template v-slot:title>Home Feed</template>
+    <template v-slot:description>
+      All posts made on the website are shown here!
+    </template>
+  </PageBanner>
+  <div id="home-feed">
+    <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
+    <div>
+      <Suspense>
+        <template #default>
+          <PostFeed :sort="sortBy" :key="sortId" feedType="All" />
+        </template>
+        <template #fallback>
+          <Loader />
+        </template>
+      </Suspense>
     </div>
   </div>
 </template>
@@ -23,6 +26,7 @@ import { useStore } from "vuex";
 import SortFeedButtons from "@/components/SortFeedButtons";
 import PostFeed from "@/components/PostFeed";
 import Loader from "@/components/Loader";
+import PageBanner from "@/components/PageBanner";
 
 export default {
   name: "Home",
@@ -30,6 +34,7 @@ export default {
     SortFeedButtons,
     Loader,
     PostFeed,
+    PageBanner,
   },
   setup() {
     const store = useStore();

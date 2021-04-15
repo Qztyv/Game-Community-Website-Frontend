@@ -1,7 +1,7 @@
 <template>
   <div v-show="!Object.keys(user).length" class="non-user">
     <div class="navbar-fixed">
-      <nav class="blue-grey lighten-1 noSelect">
+      <nav class="blue-grey darken-2 noSelect">
         <div class="nav-wrapper">
           <a href="#" class="noSelect brand-logo"> Meme Hub </a>
           <a href="#" data-target="mobile-demo-nonuser" class="sidenav-trigger">
@@ -19,7 +19,7 @@
   </div>
   <div class="user-items" v-show="Object.keys(user).length">
     <div class="navbar-fixed">
-      <nav class="blue-grey lighten-1 noSelect">
+      <nav class="blue-grey darken-2 noSelect">
         <div class="nav-wrapper">
           <a href="#" class="noSelect brand-logo">Meme Hub</a>
           <a href="#" data-target="mobile-demo-user" class="sidenav-trigger">
@@ -94,5 +94,9 @@ export default {
 
 .sidenav {
   text-align: left;
+}
+
+.user-items {
+  margin-bottom: 10px;
 }
 </style>

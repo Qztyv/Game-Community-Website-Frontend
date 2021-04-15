@@ -1,29 +1,37 @@
 <template>
-  <div id="voteButtons">
-    <div id="error" v-if="response">
-      {{ response.message }}
-    </div>
-    <button
-      @click="
-        direction === 1
-          ? setVoteDirection(0, direction)
-          : setVoteDirection(1, direction)
-      "
-    >
-      likes: {{ likes }}
-    </button>
-    <p v-if="direction === 1">You have liked this {{ documentType }}</p>
-    <button
-      @click="
-        direction === -1
-          ? setVoteDirection(0, direction)
-          : setVoteDirection(-1, direction)
-      "
-    >
-      dislikes: {{ dislikes }}
-    </button>
-    <p v-if="direction === -1">You have disliked this {{ documentType }}</p>
+  <div id="error" v-if="response">
+    {{ response.message }}
   </div>
+  <button
+    class="button waves-effect waves-light btn-small blue-grey lighten-1"
+    @click="
+      direction === 1
+        ? setVoteDirection(0, direction)
+        : setVoteDirection(1, direction)
+    "
+  >
+    <i
+      class="material-icons left"
+      v-bind:class="{ 'icon-blue': direction === 1 }"
+      >thumb_up</i
+    >
+    {{ likes }}
+  </button>
+  <button
+    class="button waves-effect waves-light btn-small blue-grey lighten-1"
+    @click="
+      direction === -1
+        ? setVoteDirection(0, direction)
+        : setVoteDirection(-1, direction)
+    "
+  >
+    <i
+      class="material-icons left"
+      v-bind:class="{ 'icon-blue': direction === -1 }"
+      >thumb_down</i
+    >
+    {{ dislikes }}
+  </button>
 </template>
 
 <script>
@@ -142,4 +150,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.btn-small {
+  height: 25px;
+  line-height: 25px;
+  font-size: 11px;
+}
+.button {
+  margin-left: 5px;
+}
+i.left {
+  margin-right: 5px;
+}
+
+i.icon-blue {
+  color: #3ea6ff;
+}
+</style>

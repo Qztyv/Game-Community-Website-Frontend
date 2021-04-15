@@ -50,7 +50,7 @@
     When the browser shrinks to a small enough size, mergeFeedsIntoDropdown = false, meaning  -->
   <ul
     id="feed-dropdown"
-    class="dropdown-content blue-grey lighten-2"
+    class="dropdown-content blue-grey darken-1"
     v-if="mergeFeedsIntoDropdown"
   >
     <li>
