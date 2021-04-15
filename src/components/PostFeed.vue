@@ -11,7 +11,12 @@
     <Loader />
   </div>
   <div v-if="responseResults !== 0">
-    <button @click="handleManualFetch">Fetch more posts</button>
+    <button
+      @click="handleManualFetch"
+      class="waves-effect waves-light btn-small blue-grey lighten-1"
+    >
+      <i class="material-icons left">refresh</i>Fetch more posts
+    </button>
   </div>
   <div v-if="responseResults === 0">No more posts left in the feed!</div>
   <div v-if="response">
@@ -134,5 +139,9 @@ export default {
 }
 .post {
   cursor: pointer;
+}
+
+i.left {
+  margin-right: 5px;
 }
 </style>

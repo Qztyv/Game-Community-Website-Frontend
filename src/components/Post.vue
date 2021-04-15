@@ -113,4 +113,8 @@ a {
 i.left {
   margin-right: 5px;
 }
+
+.card-panel {
+  padding: 18px;
+}
 </style>

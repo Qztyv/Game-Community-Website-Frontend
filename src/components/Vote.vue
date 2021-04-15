@@ -10,10 +10,13 @@
         : setVoteDirection(1, direction)
     "
   >
-    <i class="material-icons left">thumb_up</i>
+    <i
+      class="material-icons left"
+      v-bind:class="{ 'icon-blue': direction === 1 }"
+      >thumb_up</i
+    >
     {{ likes }}
   </button>
-  <p v-if="direction === 1">You have liked this {{ documentType }}</p>
   <button
     class="button waves-effect waves-light btn-small blue-grey lighten-1"
     @click="
@@ -22,10 +25,13 @@
         : setVoteDirection(-1, direction)
     "
   >
-    <i class="material-icons left">thumb_down</i>
+    <i
+      class="material-icons left"
+      v-bind:class="{ 'icon-blue': direction === -1 }"
+      >thumb_down</i
+    >
     {{ dislikes }}
   </button>
-  <p v-if="direction === -1">You have disliked this {{ documentType }}</p>
 </template>
 
 <script>
@@ -155,5 +161,9 @@ export default {
 }
 i.left {
   margin-right: 5px;
+}
+
+i.icon-blue {
+  color: #3ea6ff;
 }
 </style>

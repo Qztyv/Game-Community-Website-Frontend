@@ -1,6 +1,11 @@
 <template>
+  <PageBanner>
+    <template v-slot:title>Following Feed</template>
+    <template v-slot:description>
+      All posts from users you currently follow are shown here!
+    </template>
+  </PageBanner>
   <div id="following-feed">
-    <h2>Feed of Following</h2>
     <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
     <div>
       <Suspense>
@@ -22,6 +27,7 @@ import { useStore } from "vuex";
 import SortFeedButtons from "@/components/SortFeedButtons";
 import PostFeed from "@/components/PostFeed";
 import Loader from "@/components/Loader";
+import PageBanner from "@/components/PageBanner";
 
 export default {
   name: "Home",
@@ -29,6 +35,7 @@ export default {
     SortFeedButtons,
     Loader,
     PostFeed,
+    PageBanner,
   },
   setup() {
     const store = useStore();
