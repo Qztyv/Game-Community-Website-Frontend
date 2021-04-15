@@ -75,6 +75,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #ffffff;
+  margin-bottom: 10px;
 }
 .button {
   margin-right: 10px;

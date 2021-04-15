@@ -1,5 +1,5 @@
 <template>
-  <div class="post" v-for="post in posts" :key="post.id">
+  <div v-for="post in posts" :key="post.id">
     <router-link
       class="post-link"
       :to="{ name: 'PostSection', params: { id: post.id } }"
@@ -128,20 +128,11 @@ export default {
   text-decoration: none;
 }
 
-.post {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
-  width: 85%;
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #ffffff;
-}
-
 .post:hover {
   transform: scale(1.01);
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
+}
+.post {
+  cursor: pointer;
 }
 </style>
