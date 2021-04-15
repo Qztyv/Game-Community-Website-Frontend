@@ -1,50 +1,75 @@
 <template>
-  <div v-if="response">
-    {{ response.message }}
-  </div>
+  <PageBanner>
+    <template v-slot:title>Register Page</template>
+    <template v-slot:description>
+      Create an account so you can interact with the community!
+    </template>
+  </PageBanner>
   <form @submit.prevent="signupUser">
-    <label for="name"
-      >Enter your website name alias here (4 characters minimum):</label
-    >
-    <input
-      type="text"
-      id="name"
-      placeholder="Name alias here, e.g: Qzty"
-      v-model="name"
-      minlength="4"
-      required
-    />
-    <label for="email">Enter your email here:</label>
-    <input
-      type="email"
-      id="email"
-      placeholder="Email e.g: Qzty@gmail.com"
-      v-model="email"
-      required
-    />
-    <label for="password"
-      >Enter your password here (8 characters minimum)</label
-    >
-    <input
-      type="password"
-      id="password"
-      placeholder="********"
-      v-model="password"
-      minlength="8"
-      required
-    />
-    <label for="passwordConfirmation"
-      >Re-enter your password here (8 characters minimum)</label
-    >
-    <input
-      type="password"
-      id="passwordConfirmation"
-      placeholder="********"
-      v-model="passwordConfirm"
-      minlength="8"
-      required
-    />
-    <button type="submit">Sign Up</button>
+    <div v-if="response?.message" class="white-text card-panel red">
+      <span>{{ response.message }}</span>
+    </div>
+    <div class="card-panel">
+      <div class="input-wrapper">
+        <label for="name"
+          >Enter your website name alias here (4 characters minimum):</label
+        >
+        <input
+          type="text"
+          id="name"
+          placeholder="Name alias here, e.g: Qzty"
+          v-model="name"
+          minlength="4"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <label for="email">Enter your email here:</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Email e.g: Qzty@gmail.com"
+          v-model="email"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <label for="password"
+          >Enter your password here (8 characters minimum)</label
+        >
+        <input
+          type="password"
+          id="password"
+          placeholder="********"
+          v-model="password"
+          minlength="8"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <label for="passwordConfirmation"
+          >Re-enter your password here (8 characters minimum)</label
+        >
+        <input
+          type="password"
+          id="passwordConfirmation"
+          placeholder="********"
+          v-model="passwordConfirm"
+          minlength="8"
+          class="validate"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="waves-effect waves-light btn-small green darken-1"
+      >
+        Sign Up
+      </button>
+    </div>
   </form>
   <router-link to="/login">Have an account? Log in here</router-link>
 </template>
@@ -54,8 +79,12 @@ import AuthService from "@/services/AuthService.js";
 import { onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import PageBanner from "@/components/PageBanner.vue";
 
 export default {
+  components: {
+    PageBanner,
+  },
   setup() {
     const router = useRouter();
     const store = useStore();

@@ -72,6 +72,11 @@ export default {
         resetPasswordForm
       );
       response = response.data;
+      if (response.status === "success") {
+        apiClient.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.token}`;
+      }
     } catch (err) {
       response = handleServiceErrors(err);
     }
