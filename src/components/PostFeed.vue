@@ -124,7 +124,7 @@ export default {
 
 <style scoped>
 .post-link {
-  color: #2c3e50;
+  color: #222222;
   text-decoration: none;
 }
 
@@ -134,8 +134,10 @@ export default {
   margin-bottom: 10px;
   width: 85%;
   position: relative;
-  border: 1px solid #39495c;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   cursor: pointer;
+  background-color: #ffffff;
 }
 
 .post:hover {
