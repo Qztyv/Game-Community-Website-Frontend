@@ -4,18 +4,28 @@
     :key="comment.id"
     class="comment-block"
   >
-    <Comment :comment="comment" />
-    <Vote :document="comment" documentType="comment" />
-    <div
-      v-if="
-        loggedInUser.role === 'admin' ||
-        (comment.user && loggedInUser._id === comment.user._id)
-      "
-    >
-      <div v-if="deleteCommentResponse">
+    <div class="options">
+      <Comment :comment="comment" />
+      <Vote :document="comment" documentType="comment" />
+      <div v-if="deleteCommentResponse?.message">
         {{ deleteCommentResponse.message }}
       </div>
-      <button @click="deleteComment(index)">Delete Comment</button>
+      <ConfirmationBox
+        v-if="
+          loggedInUser.role === 'admin' ||
+          (comment.user && loggedInUser._id === comment.user._id)
+        "
+        :uniqueKey="index"
+        :shrinkButton="true"
+        @deleteDocument="deleteComment($event)"
+      >
+        <template v-slot:button-text>
+          <i class="material-icons right">delete</i></template
+        >
+        <template v-slot:button-popup-text
+          >Are you sure you want to delete your comment?</template
+        >
+      </ConfirmationBox>
     </div>
   </div>
   <div v-if="isLoading">
@@ -43,12 +53,13 @@ import Comment from "@/components/Comment";
 import Loader from "@/components/Loader";
 import Vote from "@/components/Vote";
 import { useStore } from "vuex";
-
+import ConfirmationBox from "@/components/ConfirmationBox";
 export default {
   components: {
     Comment,
     Loader,
     Vote,
+    ConfirmationBox,
   },
   props: {
     postId: {
@@ -104,7 +115,7 @@ export default {
     const deleteCommentResponse = ref(null);
     const deleteComment = async (commentIndex) => {
       let commentToDelete = comments.value[commentIndex];
-
+      console.log(commentToDelete);
       deleteCommentResponse.value = await FeedService.deleteComment(
         commentToDelete.id
       );
@@ -156,5 +167,13 @@ export default {
 <style scoped>
 .comment-block {
   padding-bottom: 10px;
+  text-align: left;
+}
+
+i.left {
+  margin-right: 5px;
+}
+i.right {
+  margin-left: 0;
 }
 </style>

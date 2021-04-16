@@ -1,5 +1,5 @@
 <template>
-  <div class="sort-options row">
+  <div class="sort-options row blue-grey darken-1">
     <button
       @click="sortBy('Newest')"
       class="button waves-effect waves-light btn-small blue-grey"
@@ -68,15 +68,21 @@ export default {
 .sort-options {
   margin-left: auto;
   margin-right: auto;
-  width: 85%;
+  width: 50%;
   position: relative;
   padding-top: 10px;
   padding-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #ffffff;
   margin-bottom: 10px;
 }
+
+@media only screen and (max-width: 992px) {
+  .sort-options {
+    width: 80%;
+  }
+}
+
 .button {
   margin-right: 10px;
 }

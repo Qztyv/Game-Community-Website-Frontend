@@ -1,21 +1,25 @@
 <template>
   <div class="comment">
-    <span v-if="comment.user !== null">
-      <router-link
-        :to="{ name: 'UserProfile', params: { userId: comment.user._id } }"
-      >
-        <span v-if="comment.user.banned">
-          <del>{{ comment.user.name }}</del>
-        </span>
-        <span v-else>
-          {{ comment.user.name }}
-        </span>
-      </router-link>
-    </span>
-    <span v-else> [deleted] </span>
-    {{ generalCreatedAt }}
+    <div class="comment-header">
+      <span v-if="comment.user !== null">
+        <router-link
+          :to="{ name: 'UserProfile', params: { userId: comment.user._id } }"
+        >
+          <span v-if="comment.user.banned">
+            <del>{{ comment.user.name }}</del>
+          </span>
+          <span v-else>
+            {{ comment.user.name }}
+          </span>
+        </router-link>
+      </span>
+      <span v-else> [deleted] </span>
+      {{ generalCreatedAt }}
+    </div>
+    <div class="comment-content">
+      <p>{{ comment.content }}</p>
+    </div>
   </div>
-  <p>{{ comment.content }}</p>
 </template>
 
 <script>
@@ -41,4 +45,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.comment {
+  margin-left: 5px;
+}
+</style>

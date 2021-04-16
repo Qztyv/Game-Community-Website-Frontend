@@ -3,24 +3,45 @@
     <div v-if="postResponse?.message" class="white-text card-panel red">
       <span>{{ postResponse.message }}</span>
     </div>
-    <div v-if="post" id="post-section">
+    <div v-if="post" class="post-section">
       <Post :post="post" />
-      <div v-if="post.user && user._id === post.user._id">
-        <router-link :to="{ name: 'UpdatePost', params: { id: post.id } }">
-          Update Post
-        </router-link>
-      </div>
-      <div v-if="deletePostResponse?.message" class="white-text card-panel red">
-        <span>{{ deletePostResponse.message }}</span>
-      </div>
       <div
+        class="post-moderation-options"
         v-if="
           user.role === 'admin' || (post.user && user._id === post.user._id)
         "
       >
-        <a href="#" @click="deletePost">Delete Post</a>
+        <div v-if="post.user && user._id === post.user._id">
+          <router-link
+            :to="{ name: 'UpdatePost', params: { id: post.id } }"
+            class="btn-small waves-effect waves-light blue-grey"
+          >
+            Update Post
+          </router-link>
+        </div>
+        <div
+          v-if="deletePostResponse?.message"
+          class="white-text card-panel red"
+        >
+          <span>{{ deletePostResponse.message }}</span>
+        </div>
+        <div
+          v-if="
+            user.role === 'admin' || (post.user && user._id === post.user._id)
+          "
+        >
+          <ConfirmationBox
+            @deleteDocument="deletePost"
+            uniqueKey="post"
+            :shrinkButton="true"
+          >
+            <template v-slot:button-text>Delete Post</template>
+            <template v-slot:button-popup-text
+              >Are you sure you want to delete this post?</template
+            >
+          </ConfirmationBox>
+        </div>
       </div>
-
       <div id="add-comment">
         <!-- Can add 2 paths here, one for logged in users and one for non-logged in users - to get rid of the text box -->
         <div v-if="!Object.keys(user).length">
@@ -57,7 +78,7 @@
           </form>
         </div>
       </div>
-      <div id="comments">
+      <div class="comments">
         <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
         <Suspense>
           <template #default>
@@ -87,12 +108,15 @@ import Loader from "@/components/Loader";
 import CommentFeed from "@/components/CommentFeed";
 import SortFeedButtons from "@/components/SortFeedButtons";
 import { useRouter } from "vue-router";
+import ConfirmationBox from "@/components/ConfirmationBox";
+
 export default {
   components: {
     Post,
     CommentFeed,
     Loader,
     SortFeedButtons,
+    ConfirmationBox,
   },
   props: {
     id: {
@@ -185,15 +209,48 @@ form {
   margin-top: 10px;
 }
 
-.comment-form {
+.post-section {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  padding: 10px;
-  width: 85%;
+  width: 50%;
   position: relative;
-  border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #ffffff;
+}
+
+@media only screen and (max-width: 992px) {
+  .post-section {
+    width: 80%;
+  }
+}
+
+.post {
+  width: 100%;
+  border: 0px solid #ccc;
+  border-bottom: 1px solid #dfdfdd;
+  border-radius: 0px;
+}
+
+.post-moderation-options {
+  border-bottom: 1px solid #dfdfdd;
+  padding-bottom: 10px;
+}
+.btn-small {
+  height: 25px;
+  line-height: 25px;
+  font-size: 11px;
+}
+
+.comment-form {
+  padding: 10px;
+  width: 100%;
+  position: relative;
+}
+
+.sort-options {
+  width: 100%;
+  border: 0px solid #ccc;
+  border-radius: 0px;
 }
 </style>
