@@ -1,67 +1,127 @@
 <template>
-  <h2>Account Settings</h2>
-  <div v-if="response">
-    {{ response.message }}
+  <PageBanner>
+    <template v-slot:title>Account Settings</template>
+    <template v-slot:description
+      >All settings regarding your account can be found here</template
+    >
+  </PageBanner>
+  <div class="account-settings">
+    <div v-if="response?.message" class="white-text card-panel red">
+      <span>{{ response.message }}</span>
+    </div>
+    <h4 class="white-text card-panel blue-grey darken-1">Account Details</h4>
+    <form @submit.prevent="updateAccount">
+      <div class="input-wrapper">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          v-model="email"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          v-model="name"
+          minlength="4"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <img
+          v-if="previewImage"
+          :src="previewImage"
+          alt="Profile Photo"
+          width="50"
+          height="50"
+          class="profile-image"
+        />
+
+        <label for="photo">Select a New Photo:</label>
+        <input
+          type="file"
+          @change="onFileChange"
+          accept="image/*"
+          id="photo"
+          name="photo"
+        />
+      </div>
+      <button
+        type="submit"
+        class="waves-effect waves-light btn-small blue-grey lighten-1"
+      >
+        Update Details
+      </button>
+    </form>
+    <h4 class="white-text card-panel blue-grey darken-1">Password Change</h4>
+    <form @submit.prevent="updatePassword">
+      <div class="input-wrapper">
+        <label for="currentPassword">Current Password</label>
+        <input
+          type="password"
+          id="currentPassword"
+          placeholder="********"
+          v-model="currentPassword"
+          minlength="8"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <label for="newPassword">New Password</label>
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="********"
+          v-model="newPassword"
+          minlength="8"
+          class="validate"
+          required
+        />
+      </div>
+      <div class="input-wrapper">
+        <label for="newPasswordConfirmation">Re-enter New Password</label>
+        <input
+          type="password"
+          id="newPasswordConfirmation"
+          placeholder="********"
+          v-model="passwordConfirm"
+          minlength="8"
+          class="validate"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="waves-effect waves-light btn-small blue-grey lighten-1"
+      >
+        Update Password
+      </button>
+    </form>
+    <h4 class="white-text card-panel blue-grey darken-1">Deactivate Account</h4>
+    <div class="delete-button">
+      <ConfirmationBox
+        @deleteDocument="deactivateAccount"
+        uniqueKey="account-deactivate"
+      >
+        <template v-slot:button-text>Deactivate Account</template>
+        <template v-slot:button-popup-text
+          >Are you sure you want to deactivate your account? You will not be
+          able to reactivate the account once this action is done. Also note
+          that deactivating your account does not delete posts and comments; if
+          you wish for these to be deleted, go through and manually delete them
+          before deactivating.</template
+        >
+      </ConfirmationBox>
+    </div>
   </div>
-  <h3>Account Details</h3>
-  <form @submit.prevent="updateAccount">
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" v-model="email" required />
-    <label for="name">Name</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      v-model="name"
-      minlength="4"
-      required
-    />
-    <img :src="user.photo" alt="Profile Photo" width="50" height="50" />
-    <label for="photo">Select a new photo</label>
-    <input
-      type="file"
-      @change="file = $event"
-      accept="image/*"
-      id="photo"
-      name="photo"
-    />
-    <button type="submit">Update Details</button>
-  </form>
-  <h3>Password Change</h3>
-  <form @submit.prevent="updatePassword">
-    <label for="currentPassword">Current Password</label>
-    <input
-      type="password"
-      id="currentPassword"
-      placeholder="********"
-      v-model="currentPassword"
-      minlength="8"
-      required
-    />
-    <label for="newPassword">New Password</label>
-    <input
-      type="password"
-      id="newPassword"
-      placeholder="********"
-      v-model="newPassword"
-      minlength="8"
-      required
-    />
-    <label for="newPasswordConfirmation">Re-enter New Password</label>
-    <input
-      type="password"
-      id="newPasswordConfirmation"
-      placeholder="********"
-      v-model="passwordConfirm"
-      minlength="8"
-      required
-    />
-    <button type="submit">Update Password</button>
-  </form>
-  <h3>Deactivate Account</h3>
-  <form @submit.prevent="deactivateAccount">
-    <button type="submit">Deactivate Account</button>
-  </form>
 </template>
 
 <script>
@@ -70,8 +130,14 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import AuthService from "@/services/AuthService.js";
 import logoutUser from "@/utils/logoutUser.js";
+import PageBanner from "@/components/PageBanner";
+import ConfirmationBox from "@/components/ConfirmationBox";
 
 export default {
+  components: {
+    PageBanner,
+    ConfirmationBox,
+  },
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -89,7 +155,7 @@ export default {
       const form = new FormData();
       form.append("name", name.value);
       form.append("email", email.value);
-      form.append("photo", file.value.target?.files[0]);
+      form.append("photo", file.value);
       response.value = await AuthService.updateAccount(form);
       if (response.value.status === "success") {
         store.dispatch("addNotification", {
@@ -97,7 +163,20 @@ export default {
           message: "Details Updated Successfully!",
         });
         store.dispatch("storeUser", response.value.data.user);
-        if (file.value.target) file.value.target.value = "";
+        if (fileObject?.target) fileObject.target.value = "";
+      }
+    };
+
+    let fileObject = null;
+    const previewImage = ref(user.value.photo);
+    const onFileChange = (e) => {
+      if (e.target.files[0]) {
+        file.value = e.target.files[0];
+        fileObject = e;
+        if (file.value) {
+          // preview the image before upload
+          previewImage.value = URL.createObjectURL(file.value);
+        }
       }
     };
 
@@ -144,6 +223,8 @@ export default {
       email,
       name,
       file,
+      previewImage,
+      onFileChange,
       updateAccount,
       response,
       currentPassword,
@@ -157,4 +238,32 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.account-settings {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  width: 50%;
+  position: relative;
+  border-radius: 4px;
+  background-color: #ffffff;
+  text-align: left;
+}
+@media only screen and (max-width: 992px) {
+  .account-settings {
+    width: 80%;
+  }
+}
+
+form {
+  width: 80%;
+}
+
+.card-panel {
+  padding: 12px;
+}
+
+.delete-button {
+  padding: 18px;
+}
+</style>

@@ -16,6 +16,7 @@
           (comment.user && loggedInUser._id === comment.user._id)
         "
         :uniqueKey="index"
+        :shrinkButton="true"
         @deleteDocument="deleteComment($event)"
       >
         <template v-slot:button-text>

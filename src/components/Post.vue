@@ -83,11 +83,17 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  width: 85%;
+  width: 50%;
   position: relative;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #ffffff;
+}
+
+@media only screen and (max-width: 992px) {
+  .post {
+    width: 80%;
+  }
 }
 .post-header {
   border-radius: 0px;

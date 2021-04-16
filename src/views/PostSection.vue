@@ -30,7 +30,11 @@
             user.role === 'admin' || (post.user && user._id === post.user._id)
           "
         >
-          <ConfirmationBox @deleteDocument="deletePost" uniqueKey="post">
+          <ConfirmationBox
+            @deleteDocument="deletePost"
+            uniqueKey="post"
+            :shrinkButton="true"
+          >
             <template v-slot:button-text>Delete Post</template>
             <template v-slot:button-popup-text
               >Are you sure you want to delete this post?</template
@@ -209,10 +213,16 @@ form {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  width: 85%;
+  width: 50%;
   position: relative;
   border-radius: 4px;
   background-color: #ffffff;
+}
+
+@media only screen and (max-width: 992px) {
+  .post-section {
+    width: 80%;
+  }
 }
 
 .post {

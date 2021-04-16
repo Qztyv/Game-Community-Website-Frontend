@@ -1,7 +1,8 @@
 <template>
   <button
     :data-target="'delete-modal-' + uniqueKey"
-    class="delete-button waves-effect waves-light btn-small red lighten-2 modal-trigger"
+    class="waves-effect waves-light btn-small red lighten-2 modal-trigger"
+    v-bind:class="{ 'delete-button': shrinkButton }"
   >
     <slot name="button-text"></slot>
   </button>
@@ -35,6 +36,11 @@ export default {
     uniqueKey: {
       type: [String, Number],
       required: true,
+    },
+    shrinkButton: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   emits: ["deleteDocument"],

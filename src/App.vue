@@ -43,8 +43,7 @@ html {
 form {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 50px;
-  width: 40%;
+  width: 45%;
   display: block;
   text-align: left;
 }
