@@ -2,10 +2,10 @@
   <div v-if="profileFollowersResponse">
     {{ profileFollowersResponse.message }}
   </div>
-  <h2>List of Active Followers</h2>
+  <h2>List of Followers</h2>
   <div v-if="hasComponentInitiallyLoaded">
     <div class="follower-list">
-      <div v-for="(follower, index) in followers" :key="follower._id">
+      <div v-for="(follower, index) in followersClone" :key="follower._id">
         <router-link
           :to="{ name: 'UserProfile', params: { userId: follower._id } }"
         >
@@ -40,7 +40,7 @@
           <button @click="removeFollower(index)">Remove</button>
         </div>
       </div>
-      <p v-if="!followers.length">This user has no activated followers ;(</p>
+      <p v-if="!followersClone.length">This user has no followers ;(</p>
     </div>
   </div>
   <div v-else>
@@ -51,7 +51,6 @@
 <script>
 import { computed, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
-import ProfileService from "../../services/ProfileService";
 import Loader from "@/components/Loader";
 import followUtils from "./../../utils/followUtils.js";
 
@@ -63,6 +62,14 @@ export default {
     userId: {
       type: String,
       required: true,
+    },
+    followers: {
+      type: Array,
+      required: true,
+    },
+    following: {
+      type: Array,
+      required: false,
     },
   },
   emits: [
@@ -76,16 +83,14 @@ export default {
     const store = useStore();
     const loggedInUser = computed(() => store.state.user);
 
-    // Get fresh value of follower array incase the user has used another device since,
-    // in these scenarios we cannot rely on local storage of the browser.
-    // There is too many edge cases to consider when using vuex for storing these things, just
-    // to simply save calls to the database - it isnt worth it for now atleast.
-    const followers = ref([]);
+    const followersClone = ref([]);
     let profileFollowersResponse = ref(null);
     const loggedInFollowing = ref([]);
     onBeforeMount(async () => {
-      followers.value = await getProfileFollowers();
+      // cannot alter props.followers, so make another array to attach property to each element later on
+      followersClone.value = props.followers;
 
+      // if we are logged in
       if (Object.keys(loggedInUser.value).length) {
         // get logged in user following so we can compare against profile followers
         // and allow our logged in user to follow / unfollow users they have also.
@@ -93,9 +98,11 @@ export default {
           loggedInUser.value._id
         );
 
+        // if logged in user has never followed anyone before we cannot apend, so ignore
+        // but if they have followed before, it wont be undefined
         if (loggedInFollowing.value != undefined) {
           followUtils.appendIsBeingFollowedProperty(
-            followers.value,
+            followersClone.value,
             loggedInFollowing.value
           );
         }
@@ -103,27 +110,13 @@ export default {
       hasComponentInitiallyLoaded.value = true;
     });
 
-    const getProfileFollowers = async () => {
-      // set response in reactive variable to display on template if something goes wrong
-      profileFollowersResponse.value = await ProfileService.getUserFollowers(
-        props.userId
-      );
-      if (
-        profileFollowersResponse.value.status === "success" &&
-        profileFollowersResponse.value.data.data.length
-      ) {
-        return profileFollowersResponse.value.data.data[0].followers;
-      }
-      return [];
-    };
-
     let processLocker = false;
 
     const addFollowing = async (followerIndex) => {
       if (!processLocker) {
         processLocker = true;
         await followUtils.addFollowing(
-          followers.value,
+          followersClone.value,
           followerIndex,
           context,
           props.userId,
@@ -137,7 +130,7 @@ export default {
       if (!processLocker) {
         processLocker = true;
         await followUtils.removeFollowing(
-          followers.value,
+          followersClone.value,
           followerIndex,
           context,
           props.userId,
@@ -153,7 +146,7 @@ export default {
       if (!processLocker) {
         processLocker = true;
         await followUtils.removeFollower(
-          followers.value,
+          followersClone.value,
           followerIndex,
           context
         );
@@ -163,7 +156,7 @@ export default {
     return {
       hasComponentInitiallyLoaded,
       loggedInUser,
-      followers,
+      followersClone,
       profileFollowersResponse,
       addFollowing,
       removeFollowing,

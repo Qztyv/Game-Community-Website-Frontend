@@ -8,8 +8,8 @@
         <img
           :src="user.photo"
           alt="Profile Photo"
-          width="50"
-          height="50"
+          width="168"
+          height="168"
           class="profile-image"
         />
         <p>
@@ -78,6 +78,8 @@
       </div>
       <router-view
         :userId="userId"
+        :followers="followers"
+        :following="following"
         @decrementFollowerCounter="user.followers--"
         @decrementFollowingCounter="user.following--"
         @incrementFollowingCounter="user.following++"
@@ -96,6 +98,7 @@ import FeedService from "@/services/FeedService.js";
 import FollowOptions from "@/components/FollowOptions";
 import Loader from "@/components/Loader";
 import ProfileService from "../services/ProfileService";
+import followUtils from "../utils/followUtils";
 export default {
   components: {
     FollowOptions,
@@ -114,8 +117,8 @@ export default {
     // path as the user profile link. Without this, the user will not get an updated component showing their info
     watch(
       () => props.userId,
-      (newValue) => {
-        getUser(newValue);
+      (newUserId) => {
+        getUser(newUserId);
       }
     );
     const store = useStore();
@@ -125,11 +128,19 @@ export default {
     const hasComponentInitiallyLoaded = ref(false);
     const user = ref(null);
     const response = ref(null);
+    let followers = ref([]);
+    let following = ref([]);
     const getUser = async (id) => {
+      hasComponentInitiallyLoaded.value = false;
       response.value = await FeedService.getUser(id);
       if (response.value.status === "success") {
         user.value = response.value.data.data;
+        followers.value = await followUtils.getProfileFollowers(id);
+        user.value.followers = followers.value.length;
+        following.value = await followUtils.getProfileFollowing(id);
+        user.value.following = following.value.length;
       }
+      hasComponentInitiallyLoaded.value = true;
     };
 
     onBeforeMount(async () => {
@@ -167,6 +178,8 @@ export default {
       response,
       hasComponentInitiallyLoaded,
       user,
+      followers,
+      following,
       loggedInUser,
       openBanForm,
       banReason,
