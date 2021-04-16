@@ -1,5 +1,5 @@
 <template>
-  <div class="sort-options row">
+  <div class="sort-options row blue-grey darken-1">
     <button
       @click="sortBy('Newest')"
       class="button waves-effect waves-light btn-small blue-grey"
@@ -74,7 +74,6 @@ export default {
   padding-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #ffffff;
   margin-bottom: 10px;
 }
 .button {

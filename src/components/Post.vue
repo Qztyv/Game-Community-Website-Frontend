@@ -22,7 +22,12 @@
       {{ generalCreatedAt }}
     </div>
     <div class="post-content">
-      <h4 class="post-content-title title-line">{{ post.postTitle }}</h4>
+      <h4
+        class="post-content-title"
+        v-bind:class="{ 'title-line': post.image || post.postContent }"
+      >
+        {{ post.postTitle }}
+      </h4>
       <div class="post-image" v-if="post.image">
         <!-- could make image responsive with materialize -->
         <img
@@ -86,7 +91,7 @@ export default {
 }
 .post-header {
   border-radius: 0px;
-  text-align: right;
+  text-align: left;
   margin: 0px;
 }
 
@@ -95,7 +100,7 @@ export default {
 }
 
 .post-content-title {
-  padding-bottom: 3px;
+  padding-bottom: 6px;
   margin-bottom: 10px;
   padding-left: 10px;
 }
@@ -115,6 +120,7 @@ export default {
 
 .post-content-text {
   padding-left: 10px;
+  margin-top: 10px;
 }
 
 .user-name:hover {
@@ -126,7 +132,7 @@ a {
 
 .options {
   margin-top: 10px;
-  margin-bottom: 1px;
+  margin-bottom: 2px;
 }
 .btn-small {
   height: 25px;
