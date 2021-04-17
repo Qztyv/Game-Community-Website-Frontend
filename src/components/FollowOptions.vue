@@ -1,17 +1,29 @@
 <template>
   <div v-if="hasComponentInitiallyLoaded">
-    <div v-if="response">
-      {{ response.message }}
+    <div v-if="response?.message" class="white-text card-panel red">
+      <span>{{ response.message }}</span>
     </div>
     <div v-if="!isFollowing">
-      <button @click="addFollowing">Follow</button>
+      <button
+        @click="addFollowing"
+        class="waves-effect waves-light btn-small blue-grey lighten-1"
+      >
+        Follow
+      </button>
     </div>
     <div v-else>
-      <button @click="removeFollowing">Unfollow</button>
+      <button
+        @click="removeFollowing"
+        class="waves-effect waves-light btn-small blue-grey lighten-1"
+      >
+        Unfollow
+      </button>
     </div>
   </div>
   <div v-else>
-    <button>Loading</button>
+    <button class="waves-effect waves-light btn-small blue-grey">
+      Loading
+    </button>
   </div>
 </template>
 
