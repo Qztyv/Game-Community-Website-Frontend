@@ -135,7 +135,9 @@ export default {
       response.value = await FeedService.getUser(id);
       if (response.value.status === "success") {
         user.value = response.value.data.data;
+        // get the followers and following of that user, and we send that down to the sub-router views
         followers.value = await followUtils.getProfileFollowers(id);
+        // we need to count the length of the array to get the accurate number (excludes deactivated accounts)
         user.value.followers = followers.value.length;
         following.value = await followUtils.getProfileFollowing(id);
         user.value.following = following.value.length;

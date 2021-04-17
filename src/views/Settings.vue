@@ -9,7 +9,7 @@
     <div v-if="response?.message" class="white-text card-panel red">
       <span>{{ response.message }}</span>
     </div>
-    <h4 class="white-text card-panel blue-grey darken-1">Account Details</h4>
+    <h5 class="white-text card-panel blue-grey darken-1">Account Details</h5>
     <form @submit.prevent="updateAccount">
       <div class="input-wrapper">
         <label for="email">Email:</label>
@@ -60,7 +60,7 @@
         Update Details
       </button>
     </form>
-    <h4 class="white-text card-panel blue-grey darken-1">Password Change</h4>
+    <h5 class="white-text card-panel blue-grey darken-1">Password Change</h5>
     <form @submit.prevent="updatePassword">
       <div class="input-wrapper">
         <label for="currentPassword">Current Password</label>
@@ -105,7 +105,7 @@
         Update Password
       </button>
     </form>
-    <h4 class="white-text card-panel blue-grey darken-1">Deactivate Account</h4>
+    <h5 class="white-text card-panel blue-grey darken-1">Deactivate Account</h5>
     <div class="delete-button">
       <ConfirmationBox
         @deleteDocument="deactivateAccount"
@@ -261,6 +261,7 @@ form {
 
 .card-panel {
   padding: 12px;
+  border-radius: 0px;
 }
 
 .delete-button {

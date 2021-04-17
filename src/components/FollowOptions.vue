@@ -10,6 +10,9 @@
       <button @click="removeFollowing">Unfollow</button>
     </div>
   </div>
+  <div v-else>
+    <button>Loading</button>
+  </div>
 </template>
 
 <script>
