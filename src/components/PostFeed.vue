@@ -48,6 +48,10 @@ export default {
       type: String,
       required: false,
     },
+    titleSearchTerm: {
+      type: String,
+      required: false,
+    },
   },
   async setup(props) {
     const posts = ref([]);
@@ -79,6 +83,15 @@ export default {
       // Only logged in users can access following-feed (backend will authenticate automatically)
       if (props.feedType === "Following") {
         response.value = await FeedService.getAllFollowingPosts(
+          limit,
+          currentPage,
+          props.sort
+        );
+      }
+
+      if (props.feedType === "searchByTitle") {
+        response.value = await FeedService.getAllPostsBySearchTermOnTitle(
+          props.titleSearchTerm,
           limit,
           currentPage,
           props.sort

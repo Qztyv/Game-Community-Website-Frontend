@@ -20,6 +20,11 @@
     </a>
   </li>
   <li>
+    <router-link to="/search"
+      ><i class="material-icons right">search</i>Search</router-link
+    >
+  </li>
+  <li>
     <router-link to="/settings"
       ><i class="material-icons right">settings</i>Settings</router-link
     >
