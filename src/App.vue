@@ -43,14 +43,19 @@ html {
 form {
   margin-left: auto;
   margin-right: auto;
-  width: 45%;
+  width: 30%;
   display: block;
   text-align: left;
+}
+@media only screen and (max-width: 1300px) {
+  form {
+    width: 40%;
+  }
 }
 
 @media only screen and (max-width: 992px) {
   form {
-    width: 80%;
+    width: 60%;
   }
 }
 a.router-link-exact-active {

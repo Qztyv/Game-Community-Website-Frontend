@@ -16,6 +16,7 @@ import UserFollowers from "@/views/nested_views/UserFollowers.vue";
 import UserFollowing from "@/views/nested_views/UserFollowing.vue";
 import CreatePost from "@/views/CreatePost.vue";
 import UpdatePost from "@/views/UpdatePost.vue";
+import Search from "@/views/Search.vue";
 
 const requireAuth = (to, from, next) => {
   if (!Object.keys(store.state.user).length) {
@@ -122,6 +123,11 @@ const routes = [
         component: UserFollowing,
       },
     ],
+  },
+  {
+    path: "/search",
+    name: "Search",
+    component: Search,
   },
   {
     path: "/:pathMatch(.*)*",

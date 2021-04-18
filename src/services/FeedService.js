@@ -146,6 +146,28 @@ export default {
     }
     return response;
   },
+  async getAllPostsBySearchTermOnTitle(searchTerm, limit, page, sort) {
+    let response;
+    try {
+      response = await apiClient.get(
+        `posts/searchByTitle/${searchTerm}?limit=${limit}&page=${page}&sort=${sort}`
+      );
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
+  async getUsersFromSearchTermOnName(searchTerm) {
+    let response;
+    try {
+      response = await apiClient.get(`users/searchByName/${searchTerm}`);
+      response = response.data;
+    } catch (err) {
+      response = handleServiceErrors(err);
+    }
+    return response;
+  },
   async getAllCommentsByUser(userId, limit, page, sort) {
     let response;
     try {
