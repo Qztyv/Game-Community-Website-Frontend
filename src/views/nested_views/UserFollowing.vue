@@ -1,11 +1,27 @@
 <template>
-  <div v-if="profileFollowingResponse">
-    {{ profileFollowingResponse.message }}
-  </div>
-  <h2>List of Active Following</h2>
   <div v-if="hasComponentInitiallyLoaded">
+    <div
+      v-if="profileFollowingResponse?.message"
+      class="white-text card-panel red"
+    >
+      <span>{{ profileFollowingResponse.message }}</span>
+    </div>
     <div class="following-list">
-      <div v-for="(followingUser, index) in following" :key="followingUser._id">
+      <div
+        v-for="(followingUser, index) in followingClone"
+        :key="followingUser._id"
+        class="following-item card-panel blue-grey darken-1"
+      >
+        <div class="profile-image-container">
+          <img
+            v-if="followingUser.photo"
+            :src="followingUser.photo"
+            alt="Profile Photo"
+            width="50"
+            height="50"
+            class="profile-image"
+          />
+        </div>
         <router-link
           :to="{ name: 'UserProfile', params: { userId: followingUser._id } }"
         >
@@ -25,20 +41,20 @@
           <button
             v-if="!followingUser.isBeingFollowed"
             @click="addFollowing(index)"
+            class="waves-effect waves-light btn-small blue-grey lighten-1"
           >
             Follow
           </button>
           <button
             v-if="followingUser.isBeingFollowed"
             @click="removeFollowing(index)"
+            class="waves-effect waves-light btn-small blue-grey lighten-1"
           >
             Unfollow
           </button>
         </div>
       </div>
-      <p v-if="!following.length">
-        This user is not following anyone activated ;(
-      </p>
+      <p v-if="!followingClone.length">This user is not following anyone ;(</p>
     </div>
   </div>
   <div v-else>
@@ -49,16 +65,20 @@
 <script>
 import { computed, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
-import ProfileService from "../../services/ProfileService";
 import Loader from "@/components/Loader";
 import followUtils from "../../utils/followUtils";
 export default {
+  inheritAttrs: false,
   components: {
     Loader,
   },
   props: {
     userId: {
       type: String,
+      required: true,
+    },
+    following: {
+      type: Array,
       required: true,
     },
   },
@@ -73,16 +93,13 @@ export default {
     const store = useStore();
     const loggedInUser = computed(() => store.state.user);
 
-    // Get fresh value of following array incase the user has used another device since,
-    // in these scenarios we cannot rely on local storage of the browser.
-    // There is too many edge cases to consider when using vuex for storing these things, just
-    // to simply save calls to the database - it isnt worth it for now atleast.
-    const following = ref([]);
+    // cannot alter prop so need new variable to add a property on later.
+    const followingClone = ref([]);
     let profileFollowingResponse = ref(null);
     const loggedInFollowing = ref([]);
 
     onBeforeMount(async () => {
-      following.value = await getProfileFollowing();
+      followingClone.value = props.following;
 
       if (Object.keys(loggedInUser.value).length) {
         // Get logged in user following so we can compare against profile following.
@@ -92,27 +109,13 @@ export default {
 
         if (loggedInFollowing.value != undefined) {
           followUtils.appendIsBeingFollowedProperty(
-            following.value,
+            followingClone.value,
             loggedInFollowing.value
           );
         }
       }
       hasComponentInitiallyLoaded.value = true;
     });
-
-    const getProfileFollowing = async () => {
-      // set response in reactive variable to display on template if something goes wrong
-      profileFollowingResponse.value = await ProfileService.getUserFollowing(
-        props.userId
-      );
-      if (
-        profileFollowingResponse.value.status === "success" &&
-        profileFollowingResponse.value.data.data.length
-      ) {
-        return profileFollowingResponse.value.data.data[0].following;
-      }
-      return [];
-    };
 
     let processLocker = false;
     // In the scenario that a logged in user is viewing another users profile and their following,
@@ -123,7 +126,7 @@ export default {
       if (!processLocker) {
         processLocker = true;
         await followUtils.addFollowing(
-          following.value,
+          followingClone.value,
           followingIndex,
           context,
           props.userId,
@@ -137,7 +140,7 @@ export default {
       if (!processLocker) {
         processLocker = true;
         await followUtils.removeFollowing(
-          following.value,
+          followingClone.value,
           followingIndex,
           context,
           props.userId,
@@ -150,7 +153,7 @@ export default {
     return {
       hasComponentInitiallyLoaded,
       loggedInUser,
-      following,
+      followingClone,
       profileFollowingResponse,
       addFollowing,
       removeFollowing,
@@ -159,4 +162,34 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.following-item {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media only screen and (max-width: 992px) {
+  .following-item {
+    width: 80%;
+  }
+}
+
+.btn-small {
+  height: 25px;
+  line-height: 25px;
+  font-size: 11px;
+}
+</style>

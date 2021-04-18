@@ -154,6 +154,6 @@ i.left {
 }
 
 .card-panel {
-  padding: 18px;
+  padding: 18px 18px 18px 10px;
 }
 </style>

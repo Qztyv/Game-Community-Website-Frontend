@@ -131,14 +131,26 @@ export default {
 .post-link {
   color: #222222;
   text-decoration: none;
+  display: inline-block;
+  width: 50%;
+  margin-bottom: 10px;
+}
+@media only screen and (max-width: 992px) {
+  .post-link {
+    width: 80%;
+  }
+}
+/* Need to override the child post so that the router-link parent element has accurate
+   size */
+.post {
+  width: 100%;
+  margin-bottom: 0px;
+  cursor: pointer;
 }
 
 .post:hover {
   transform: scale(1.01);
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
-}
-.post {
-  cursor: pointer;
 }
 
 i.left {

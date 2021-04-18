@@ -1,11 +1,27 @@
 <template>
-  <div v-if="profileFollowersResponse">
-    {{ profileFollowersResponse.message }}
-  </div>
-  <h2>List of Active Followers</h2>
   <div v-if="hasComponentInitiallyLoaded">
+    <div
+      v-if="profileFollowersResponse?.message"
+      class="white-text card-panel red"
+    >
+      <span>{{ profileFollowersResponse.message }}</span>
+    </div>
     <div class="follower-list">
-      <div v-for="(follower, index) in followers" :key="follower._id">
+      <div
+        v-for="(follower, index) in followersClone"
+        :key="follower._id"
+        class="follower-item card-panel blue-grey darken-1"
+      >
+        <div class="profile-image-container">
+          <img
+            v-if="follower.photo"
+            :src="follower.photo"
+            alt="Profile Photo"
+            width="50"
+            height="50"
+            class="profile-image"
+          />
+        </div>
         <router-link
           :to="{ name: 'UserProfile', params: { userId: follower._id } }"
         >
@@ -23,12 +39,17 @@
             Object.keys(loggedInUser).length
           "
         >
-          <button v-if="!follower.isBeingFollowed" @click="addFollowing(index)">
+          <button
+            v-if="!follower.isBeingFollowed"
+            @click="addFollowing(index)"
+            class="waves-effect waves-light btn-small blue-grey lighten-1"
+          >
             Follow
           </button>
           <button
             v-if="follower.isBeingFollowed"
             @click="removeFollowing(index)"
+            class="waves-effect waves-light btn-small blue-grey lighten-1"
           >
             Unfollow
           </button>
@@ -37,10 +58,19 @@
         <!-- If user is on their own profile on their own followers page, they can remove
              people who follow them -->
         <div v-if="userId === loggedInUser._id">
-          <button @click="removeFollower(index)">Remove</button>
+          <ConfirmationBox
+            @deleteDocument="removeFollower(index)"
+            :uniqueKey="index"
+            :shrinkButton="true"
+          >
+            <template v-slot:button-text>Remove</template>
+            <template v-slot:button-popup-text
+              >Are you sure you want to remove this follower?</template
+            >
+          </ConfirmationBox>
         </div>
       </div>
-      <p v-if="!followers.length">This user has no activated followers ;(</p>
+      <p v-if="!followersClone.length">This user has no followers ;(</p>
     </div>
   </div>
   <div v-else>
@@ -51,17 +81,23 @@
 <script>
 import { computed, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
-import ProfileService from "../../services/ProfileService";
 import Loader from "@/components/Loader";
 import followUtils from "./../../utils/followUtils.js";
+import ConfirmationBox from "@/components/ConfirmationBox";
 
 export default {
+  inheritAttrs: false,
   components: {
     Loader,
+    ConfirmationBox,
   },
   props: {
     userId: {
       type: String,
+      required: true,
+    },
+    followers: {
+      type: Array,
       required: true,
     },
   },
@@ -76,16 +112,14 @@ export default {
     const store = useStore();
     const loggedInUser = computed(() => store.state.user);
 
-    // Get fresh value of follower array incase the user has used another device since,
-    // in these scenarios we cannot rely on local storage of the browser.
-    // There is too many edge cases to consider when using vuex for storing these things, just
-    // to simply save calls to the database - it isnt worth it for now atleast.
-    const followers = ref([]);
+    const followersClone = ref([]);
     let profileFollowersResponse = ref(null);
     const loggedInFollowing = ref([]);
     onBeforeMount(async () => {
-      followers.value = await getProfileFollowers();
+      // cannot alter props.followers, so make another array to attach property to each element later on
+      followersClone.value = props.followers;
 
+      // if we are logged in
       if (Object.keys(loggedInUser.value).length) {
         // get logged in user following so we can compare against profile followers
         // and allow our logged in user to follow / unfollow users they have also.
@@ -93,9 +127,11 @@ export default {
           loggedInUser.value._id
         );
 
+        // if logged in user has never followed anyone before we cannot apend, so ignore
+        // but if they have followed before, it wont be undefined
         if (loggedInFollowing.value != undefined) {
           followUtils.appendIsBeingFollowedProperty(
-            followers.value,
+            followersClone.value,
             loggedInFollowing.value
           );
         }
@@ -103,27 +139,13 @@ export default {
       hasComponentInitiallyLoaded.value = true;
     });
 
-    const getProfileFollowers = async () => {
-      // set response in reactive variable to display on template if something goes wrong
-      profileFollowersResponse.value = await ProfileService.getUserFollowers(
-        props.userId
-      );
-      if (
-        profileFollowersResponse.value.status === "success" &&
-        profileFollowersResponse.value.data.data.length
-      ) {
-        return profileFollowersResponse.value.data.data[0].followers;
-      }
-      return [];
-    };
-
     let processLocker = false;
 
     const addFollowing = async (followerIndex) => {
       if (!processLocker) {
         processLocker = true;
         await followUtils.addFollowing(
-          followers.value,
+          followersClone.value,
           followerIndex,
           context,
           props.userId,
@@ -137,7 +159,7 @@ export default {
       if (!processLocker) {
         processLocker = true;
         await followUtils.removeFollowing(
-          followers.value,
+          followersClone.value,
           followerIndex,
           context,
           props.userId,
@@ -153,7 +175,7 @@ export default {
       if (!processLocker) {
         processLocker = true;
         await followUtils.removeFollower(
-          followers.value,
+          followersClone.value,
           followerIndex,
           context
         );
@@ -163,7 +185,7 @@ export default {
     return {
       hasComponentInitiallyLoaded,
       loggedInUser,
-      followers,
+      followersClone,
       profileFollowersResponse,
       addFollowing,
       removeFollowing,
@@ -173,4 +195,33 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.follower-item {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+a {
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media only screen and (max-width: 992px) {
+  .follower-item {
+    width: 80%;
+  }
+}
+
+.btn-small {
+  height: 25px;
+  line-height: 25px;
+  font-size: 11px;
+}
+</style>

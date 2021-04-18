@@ -4,8 +4,10 @@
     :key="comment.id"
     class="comment-block"
   >
-    <div class="options">
+    <div class="comment-wrapper">
       <Comment :comment="comment" />
+    </div>
+    <div class="options">
       <Vote :document="comment" documentType="comment" />
       <div v-if="deleteCommentResponse?.message">
         {{ deleteCommentResponse.message }}
@@ -170,9 +172,14 @@ export default {
   text-align: left;
 }
 
+.comment-wrapper {
+  margin-left: 5px;
+}
+
 i.left {
   margin-right: 5px;
 }
+
 i.right {
   margin-left: 0;
 }

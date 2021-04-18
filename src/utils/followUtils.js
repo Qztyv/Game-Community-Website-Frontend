@@ -80,4 +80,20 @@ export default {
       });
     }
   },
+  async getProfileFollowing(userId) {
+    // set response in reactive variable to display on template if something goes wrong
+    let response = await ProfileService.getUserFollowing(userId);
+    if (response.status === "success" && response.data.data.length) {
+      return response.data.data[0].following;
+    }
+    return [];
+  },
+  async getProfileFollowers(userId) {
+    // set response in reactive variable to display on template if something goes wrong
+    let response = await ProfileService.getUserFollowers(userId);
+    if (response.status === "success" && response.data.data.length) {
+      return response.data.data[0].followers;
+    }
+    return [];
+  },
 };

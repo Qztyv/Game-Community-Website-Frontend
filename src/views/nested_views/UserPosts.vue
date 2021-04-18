@@ -26,6 +26,7 @@ import PostFeed from "@/components/PostFeed";
 import Loader from "@/components/Loader";
 
 export default {
+  inheritAttrs: false,
   components: {
     SortFeedButtons,
     PostFeed,

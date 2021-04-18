@@ -1,17 +1,13 @@
 <template>
-  <div id="users-comments">
-    <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
-    <div>
-      <Suspense>
-        <template #default>
-          <UserCommentFeed :sort="sortBy" :key="sortId" :userId="userId" />
-        </template>
-        <template #fallback>
-          <Loader />
-        </template>
-      </Suspense>
-    </div>
-  </div>
+  <SortFeedButtons @sortBy="updateFeedSortBy($event)" />
+  <Suspense>
+    <template #default>
+      <UserCommentFeed :sort="sortBy" :key="sortId" :userId="userId" />
+    </template>
+    <template #fallback>
+      <Loader />
+    </template>
+  </Suspense>
 </template>
 
 <script>
@@ -20,6 +16,7 @@ import UserCommentFeed from "@/components/UserCommentFeed";
 import Loader from "@/components/Loader";
 import { ref } from "vue";
 export default {
+  inheritAttrs: false,
   components: {
     SortFeedButtons,
     UserCommentFeed,
@@ -47,4 +44,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

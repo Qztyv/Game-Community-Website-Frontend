@@ -1,22 +1,36 @@
 <template>
-  <div v-for="comment in comments" :key="comment.id">
-    <h3>
-      <div v-if="comment.post">
+  <div
+    v-for="comment in comments"
+    :key="comment.id"
+    class="user-comments-wrapper"
+  >
+    <div class="post-title-wrapper white-text card-panel blue-grey darken-1">
+      <p v-if="comment.post">
+        Post:
         <router-link
+          class="post-link"
           :to="{ name: 'PostSection', params: { id: comment.post.id } }"
-          >{{ comment.post.postTitle }}
+        >
+          <i>{{ comment.post.postTitle }}</i>
         </router-link>
-      </div>
-      <div v-else>Post Deleted</div>
-    </h3>
-    <Comment :comment="comment" />
-    <p>Likes: {{ comment.likes }} Dislikes: {{ comment.dislikes }}</p>
+      </p>
+      <p v-else>Post: [Deleted]</p>
+    </div>
+    <div class="comment-content-wrapper">
+      <Comment :comment="comment" />
+      <p>Likes: {{ comment.likes }} Dislikes: {{ comment.dislikes }}</p>
+    </div>
   </div>
   <div v-if="isLoading">
     <Loader />
   </div>
   <div v-if="responseResults !== 0">
-    <button @click="handleManualFetch">Fetch More</button>
+    <button
+      @click="handleManualFetch"
+      class="waves-effect waves-light btn-small blue-grey"
+    >
+      <i class="material-icons left">refresh</i>Fetch More Comments
+    </button>
   </div>
   <div v-if="responseResults === 0">No more comments made</div>
   <div v-if="response">
@@ -110,4 +124,44 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.user-comments-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  position: relative;
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+@media only screen and (max-width: 992px) {
+  .user-comments-wrapper {
+    width: 80%;
+  }
+}
+
+.post-title-wrapper {
+  border-radius: 0px;
+}
+
+.post-link {
+  color: white;
+}
+.post-link:hover {
+  text-decoration: underline;
+}
+
+.card-panel {
+  padding: 18px 18px 18px 10px;
+  margin: 0;
+}
+
+.comment-content-wrapper {
+  padding: 5px 0px 0px 10px;
+}
+i.left {
+  margin-right: 5px;
+}
+</style>
