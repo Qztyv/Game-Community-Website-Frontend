@@ -1,14 +1,27 @@
 <template>
-  <div v-if="profileFollowingResponse">
-    {{ profileFollowingResponse.message }}
-  </div>
-  <h2>List of Following</h2>
   <div v-if="hasComponentInitiallyLoaded">
+    <div
+      v-if="profileFollowingResponse?.message"
+      class="white-text card-panel red"
+    >
+      <span>{{ profileFollowingResponse.message }}</span>
+    </div>
     <div class="following-list">
       <div
         v-for="(followingUser, index) in followingClone"
         :key="followingUser._id"
+        class="following-item card-panel blue-grey darken-1"
       >
+        <div class="profile-image-container">
+          <img
+            v-if="followingUser.photo"
+            :src="followingUser.photo"
+            alt="Profile Photo"
+            width="50"
+            height="50"
+            class="profile-image"
+          />
+        </div>
         <router-link
           :to="{ name: 'UserProfile', params: { userId: followingUser._id } }"
         >
@@ -28,12 +41,14 @@
           <button
             v-if="!followingUser.isBeingFollowed"
             @click="addFollowing(index)"
+            class="waves-effect waves-light btn-small blue-grey lighten-1"
           >
             Follow
           </button>
           <button
             v-if="followingUser.isBeingFollowed"
             @click="removeFollowing(index)"
+            class="waves-effect waves-light btn-small blue-grey lighten-1"
           >
             Unfollow
           </button>
@@ -53,6 +68,7 @@ import { useStore } from "vuex";
 import Loader from "@/components/Loader";
 import followUtils from "../../utils/followUtils";
 export default {
+  inheritAttrs: false,
   components: {
     Loader,
   },
@@ -64,10 +80,6 @@ export default {
     following: {
       type: Array,
       required: true,
-    },
-    followers: {
-      type: Array,
-      required: false,
     },
   },
   emits: [
@@ -150,4 +162,34 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.following-item {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media only screen and (max-width: 992px) {
+  .following-item {
+    width: 80%;
+  }
+}
+
+.btn-small {
+  height: 25px;
+  line-height: 25px;
+  font-size: 11px;
+}
+</style>

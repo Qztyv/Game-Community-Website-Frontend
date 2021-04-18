@@ -16,6 +16,7 @@ import UserCommentFeed from "@/components/UserCommentFeed";
 import Loader from "@/components/Loader";
 import { ref } from "vue";
 export default {
+  inheritAttrs: false,
   components: {
     SortFeedButtons,
     UserCommentFeed,

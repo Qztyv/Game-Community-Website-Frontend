@@ -153,6 +153,7 @@ export default {
     watch(
       () => props.userId,
       (newUserId) => {
+        openBanForm.value = false;
         getUser(newUserId);
       }
     );
@@ -250,7 +251,6 @@ a.router-link-exact-active {
   margin-right: auto;
   margin-bottom: 10px;
   width: 50%;
-  position: relative;
   border-radius: 4px;
 }
 
@@ -270,6 +270,16 @@ a.router-link-exact-active {
     height: 140px;
   }
 }
+
+@media only screen and (max-width: 485px) {
+  .user-profile-wrapper {
+    display: block;
+  }
+  .user-profile {
+    display: block;
+  }
+}
+
 .profile-image {
   border: 3px solid #dfdfdd;
   justify-self: left;

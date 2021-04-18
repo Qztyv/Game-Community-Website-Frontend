@@ -4,7 +4,7 @@
   </div>
   <button
     class="button waves-effect waves-light btn-small blue-grey"
-    @click="
+    @click.prevent="
       direction === 1
         ? setVoteDirection(0, direction)
         : setVoteDirection(1, direction)
@@ -19,7 +19,7 @@
   </button>
   <button
     class="button waves-effect waves-light btn-small blue-grey"
-    @click="
+    @click.prevent="
       direction === -1
         ? setVoteDirection(0, direction)
         : setVoteDirection(-1, direction)

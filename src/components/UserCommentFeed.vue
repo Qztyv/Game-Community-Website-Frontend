@@ -25,7 +25,12 @@
     <Loader />
   </div>
   <div v-if="responseResults !== 0">
-    <button @click="handleManualFetch">Fetch More</button>
+    <button
+      @click="handleManualFetch"
+      class="waves-effect waves-light btn-small blue-grey"
+    >
+      <i class="material-icons left">refresh</i>Fetch More Comments
+    </button>
   </div>
   <div v-if="responseResults === 0">No more comments made</div>
   <div v-if="response">
@@ -155,5 +160,8 @@ export default {
 
 .comment-content-wrapper {
   padding: 5px 0px 0px 10px;
+}
+i.left {
+  margin-right: 5px;
 }
 </style>
