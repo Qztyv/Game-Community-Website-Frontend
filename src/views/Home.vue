@@ -2,7 +2,8 @@
   <PageBanner>
     <template v-slot:title>Home Feed</template>
     <template v-slot:description>
-      All posts made on the website are shown here!
+      Welcome to the Gaming Hubs' home feed! All gaming related posts made on
+      the website are shown here!
     </template>
   </PageBanner>
   <div id="home-feed">

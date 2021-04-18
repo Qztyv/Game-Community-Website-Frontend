@@ -87,6 +87,10 @@ export default {
           currentPage,
           props.sort
         );
+        if (response.value.message === "No document found with that ID") {
+          responseResults.value = 0;
+          response.value.message = null;
+        }
       }
 
       if (props.feedType === "searchByTitle") {

@@ -11,13 +11,11 @@
     </div>
     <div class="card-panel">
       <div class="input-wrapper">
-        <label for="name"
-          >Enter your website name alias here (4 characters minimum):</label
-        >
+        <label for="name">Enter your display name here:</label>
         <input
           type="text"
           id="name"
-          placeholder="Name alias here, e.g: Qzty"
+          placeholder="display name"
           v-model="name"
           minlength="4"
           class="validate"
@@ -29,7 +27,7 @@
         <input
           type="email"
           id="email"
-          placeholder="Email e.g: Qzty@gmail.com"
+          placeholder="email"
           v-model="email"
           class="validate"
           required
