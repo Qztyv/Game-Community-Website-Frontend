@@ -9,7 +9,11 @@
     >
       <div class="user-profile">
         <img
-          :src="user.photo"
+          :src="
+            user.photo
+              ? user.photo
+              : require('@/assets/default_profile_image.png')
+          "
           alt="Profile Photo"
           width="168"
           height="168"

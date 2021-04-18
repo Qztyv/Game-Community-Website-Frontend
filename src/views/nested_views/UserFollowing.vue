@@ -14,8 +14,11 @@
       >
         <div class="profile-image-container">
           <img
-            v-if="followingUser.photo"
-            :src="followingUser.photo"
+            :src="
+              followingUser.photo
+                ? followingUser.photo
+                : require('@/assets/default_profile_image.png')
+            "
             alt="Profile Photo"
             width="50"
             height="50"
