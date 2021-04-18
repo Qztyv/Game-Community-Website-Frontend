@@ -3,7 +3,7 @@
     <div class="navbar-fixed">
       <nav class="blue-grey darken-2 noSelect">
         <div class="nav-wrapper">
-          <a href="#" class="noSelect brand-logo"> Meme Hub </a>
+          <a href="#" class="noSelect brand-logo">Gaming Hub</a>
           <a href="#" data-target="mobile-demo-nonuser" class="sidenav-trigger">
             <i class="material-icons">menu</i>
           </a>
@@ -21,7 +21,7 @@
     <div class="navbar-fixed">
       <nav class="blue-grey darken-2 noSelect">
         <div class="nav-wrapper">
-          <a href="#" class="noSelect brand-logo">Meme Hub</a>
+          <a href="#" class="noSelect brand-logo">Gaming Hub</a>
           <a href="#" data-target="mobile-demo-user" class="sidenav-trigger">
             <i class="material-icons">menu</i>
           </a>

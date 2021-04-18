@@ -36,8 +36,11 @@
       </div>
       <div class="input-wrapper">
         <img
-          v-if="previewImage"
-          :src="previewImage"
+          :src="
+            previewImage
+              ? previewImage
+              : require('@/assets/default_profile_image.png')
+          "
           alt="Profile Photo"
           width="50"
           height="50"

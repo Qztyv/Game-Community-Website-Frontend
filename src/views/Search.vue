@@ -60,8 +60,11 @@
       >
         <div class="profile-image-container">
           <img
-            v-if="user.photo"
-            :src="user.photo"
+            :src="
+              user.photo
+                ? user.photo
+                : require('@/assets/default_profile_image.png')
+            "
             alt="Profile Photo"
             width="50"
             height="50"

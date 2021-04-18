@@ -15,16 +15,14 @@
         <input
           type="email"
           id="email"
-          placeholder="Email e.g: Qzty@gmail.com"
+          placeholder="email"
           v-model="email"
           class="validate"
           required
         />
       </div>
       <div class="input-wrapper">
-        <label for="password"
-          >Enter your password here (8 characters minimum)</label
-        >
+        <label for="password">Enter your password here:</label>
         <input
           type="password"
           id="password"

@@ -40,7 +40,11 @@
       Profile
       <div class="profile-image-container">
         <img
-          :src="user.photo"
+          :src="
+            user.photo
+              ? user.photo
+              : require('@/assets/default_profile_image.png')
+          "
           alt="Profile Photo"
           width="50"
           height="50"
