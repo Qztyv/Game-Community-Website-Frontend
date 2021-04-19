@@ -38,7 +38,7 @@
               class="responsive-img z-depth-2"
             />
             <div class="input-wrapper">
-              <label for="image">Select A New Image:</label>
+              <label for="image">Upload a New Image:</label>
               <input
                 type="file"
                 @change="onFileChange"
@@ -56,14 +56,26 @@
             </div>
             <div class="input-wrapper">
               <label for="postContent">Update Text Content:</label>
-              <textarea
-                type="text"
+              <Editor
                 id="postContent"
-                name="postContent"
-                placeholder="Text (optional)"
+                api-key="ny0ru2fbjm0okc9xjdlur1e71s25bbchq7l0v94cxm5vol0o"
                 v-model="postContent"
-                maxlength="3000"
-                class="materialize-textarea"
+                :init="{
+                  selector: 'textarea#full-featured-non-premium',
+                  plugins:
+                    'preview paste importcss searchreplace autolink directionality visualblocks visualchars fullscreen image link media charmap hr insertdatetime advlist lists wordcount textpattern noneditable help charmap emoticons',
+                  menubar: 'file edit view insert format tools help',
+                  toolbar:
+                    'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen  preview | image media link | ltr rtl',
+                  toolbar_sticky: true,
+                  content_css: '//www.tiny.cloud/css/codepen.min.css',
+                  toolbar_mode: 'sliding',
+                  contextmenu: 'link image imagetools',
+                  height: 520,
+                  image_class_list: [
+                    { title: 'Responsive', value: 'responsive-img z-depth-2' },
+                  ],
+                }"
               />
             </div>
             <button
@@ -87,11 +99,13 @@ import FeedService from "./../services/FeedService.js";
 import Loader from "@/components/Loader";
 import { useRouter } from "vue-router";
 import PageBanner from "@/components/PageBanner";
+import Editor from "@tinymce/tinymce-vue";
 
 export default {
   components: {
     Loader,
     PageBanner,
+    Editor,
   },
   props: {
     id: {
@@ -205,5 +219,23 @@ export default {
 .responsive-img {
   max-height: 520px;
   text-align: center;
+}
+form {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  display: block;
+  text-align: left;
+}
+@media only screen and (max-width: 1300px) {
+  form {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  form {
+    width: 80%;
+  }
 }
 </style>
