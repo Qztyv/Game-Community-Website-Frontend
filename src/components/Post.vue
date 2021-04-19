@@ -16,6 +16,17 @@
               {{ post.user.name }}
             </i>
           </span>
+          <img
+            :src="
+              post.user.photo
+                ? post.user.photo
+                : require('@/assets/default_profile_image.png')
+            "
+            alt="Profile Photo"
+            width="25"
+            height="25"
+            class="profile-image"
+          />
         </router-link>
       </span>
       <span v-else> [deleted] </span>
@@ -78,11 +89,15 @@ export default {
       // tinyMCE make it awkward to make videos responsive on the free version, so this is a workaround to make the
       // iframes responsive
       let iframes = document.body.getElementsByTagName("iframe");
+
       for (let iframe of iframes) {
-        console.log(iframe.attributes.width.value);
         iframe.attributes.width.value = "100%";
-        // may want to change the height depending on small monitor / phone users
-        iframe.attributes.height.value = "520px";
+        // want to change the height depending on small monitor / phone users
+        if (document.body.clientWidth > 700) {
+          iframe.attributes.height.value = "520px";
+        } else {
+          iframe.attributes.height.value = "270px";
+        }
       }
 
       // workaround to get bold-text to work. Couldnt override strong font-weight in css, or anywhere else. Seems to only
@@ -102,6 +117,10 @@ export default {
 </script>
 
 <style scoped>
+.profile-image {
+  margin-left: 5px;
+}
+
 .post {
   margin-left: auto;
   margin-right: auto;

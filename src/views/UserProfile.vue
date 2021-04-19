@@ -53,6 +53,16 @@
                 @decrementFollowerCounter="user.followers--"
               />
             </div>
+            <div
+              class="follow-stats-items"
+              v-if="loggedInUser._id === user._id"
+            >
+              <router-link
+                :to="{ name: 'Settings' }"
+                class="waves-effect waves-light btn-small blue-grey lighten-1"
+                >Edit Profile</router-link
+              >
+            </div>
           </div>
           <div
             class="admin-options"
