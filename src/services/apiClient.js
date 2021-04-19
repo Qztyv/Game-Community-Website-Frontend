@@ -2,8 +2,8 @@ import axios from "axios";
 import store from "@/store/index.js";
 
 const apiClient = axios.create({
-  baseURL: "https://api-game-community-website.herokuapp.com/api/v1/", // for deployment
-  //baseURL: "http://127.0.0.1:3000/api/v1/", // for local development
+  //baseURL: "https://api-game-community-website.herokuapp.com/api/v1/", // for deployment
+  baseURL: "http://127.0.0.1:3000/api/v1/", // for local development
   timeout: 15 * 1000,
   withCredentials: true,
   headers: { "X-Forwarded-Proto": "https" },

@@ -129,7 +129,6 @@ export default {
     const router = useRouter();
 
     const user = computed(() => store.state.user);
-    console.log(user.value);
     const hasComponentInitiallyLoaded = ref(false);
 
     const postResponse = ref(null);
