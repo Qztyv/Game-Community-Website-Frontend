@@ -38,7 +38,12 @@
   <li>
     <router-link :to="{ name: 'UserProfile', params: { userId: user._id } }">
       Profile
-      <div class="profile-image-container">
+      <div
+        class="profile-image-container"
+        v-bind:class="{
+          'side-nav-image-container-adjuster ': !mergeFeedsIntoDropdown,
+        }"
+      >
         <img
           :src="
             user.photo
@@ -49,6 +54,7 @@
           width="50"
           height="50"
           class="profile-image"
+          v-bind:class="{ 'side-nav-image-adjuster': !mergeFeedsIntoDropdown }"
         />
       </div>
     </router-link>
@@ -107,5 +113,15 @@ export default {
   float: right;
   padding-left: 10px;
   margin-top: 5px;
+}
+
+/* The sidenav is smaller, so we want to adjust the image to keep it in the correct place */
+.side-nav-image-container-adjuster {
+  margin-right: 23px;
+}
+
+.side-nav-image-adjuster {
+  width: 40px;
+  height: 40px;
 }
 </style>

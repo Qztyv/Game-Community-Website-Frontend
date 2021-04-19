@@ -1,11 +1,21 @@
 <template>
   <div class="post">
     <div class="post-header white-text card-panel blue-grey darken-1">
-      Posted by
-      <span v-if="post.user !== null" class="user-name">
+      Posted by<span v-if="post.user !== null" class="user-name">
         <router-link
           :to="{ name: 'UserProfile', params: { userId: post.user._id } }"
         >
+          <img
+            :src="
+              post.user.photo
+                ? post.user.photo
+                : require('@/assets/default_profile_image.png')
+            "
+            alt="Profile Photo"
+            width="30"
+            height="30"
+            class="profile-image"
+          />
           <span v-if="post.user.banned">
             <i>
               <del>{{ post.user.name }}</del>
@@ -16,21 +26,10 @@
               {{ post.user.name }}
             </i>
           </span>
-          <img
-            :src="
-              post.user.photo
-                ? post.user.photo
-                : require('@/assets/default_profile_image.png')
-            "
-            alt="Profile Photo"
-            width="25"
-            height="25"
-            class="profile-image"
-          />
         </router-link>
       </span>
       <span v-else> [deleted] </span>
-      {{ generalCreatedAt }}
+      - {{ generalCreatedAt }}
     </div>
     <div class="post-content">
       <h4
@@ -119,6 +118,7 @@ export default {
 <style scoped>
 .profile-image {
   margin-left: 5px;
+  vertical-align: bottom;
 }
 
 .post {
@@ -171,6 +171,7 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 10px;
+  overflow-wrap: break-word;
 }
 
 .user-name:hover {
