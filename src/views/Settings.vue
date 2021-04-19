@@ -209,7 +209,6 @@ export default {
 
     const deactivateAccount = async () => {
       response.value = await AuthService.deactivateAccount();
-      console.log(response.value);
       if (response.value.status === 204) {
         store.dispatch("addNotification", {
           type: "success",

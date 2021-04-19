@@ -53,7 +53,6 @@ export default {
 
     const forgotPassword = async () => {
       response.value = await AuthService.forgotPassword({ email: email.value });
-      console.log(response.value);
       if (response.value.status === "success") {
         wasSuccessful.value = true;
       } else {

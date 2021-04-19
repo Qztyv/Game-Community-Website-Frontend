@@ -36,9 +36,11 @@
           class="responsive-img z-depth-2"
         />
       </div>
-      <p v-if="post.postContent" class="post-content-text">
-        {{ post.postContent }}
-      </p>
+      <div
+        v-if="post.postContent"
+        class="post-content-text"
+        v-html="post.postContent"
+      ></div>
     </div>
     <div class="options">
       <Vote :document="post" documentType="post" />
@@ -55,6 +57,7 @@
 <script>
 import getGeneralTimeSinceCreation from "@/utils/getTimeBetweenTwoDates.js";
 import Vote from "@/components/Vote";
+import { onMounted } from "vue";
 export default {
   components: {
     Vote,
@@ -70,6 +73,26 @@ export default {
       Date.now(),
       props.post.createdAt
     );
+
+    onMounted(() => {
+      // tinyMCE make it awkward to make videos responsive on the free version, so this is a workaround to make the
+      // iframes responsive
+      let iframes = document.body.getElementsByTagName("iframe");
+      for (let iframe of iframes) {
+        console.log(iframe.attributes.width.value);
+        iframe.attributes.width.value = "100%";
+        // may want to change the height depending on small monitor / phone users
+        iframe.attributes.height.value = "520px";
+      }
+
+      // workaround to get bold-text to work. Couldnt override strong font-weight in css, or anywhere else. Seems to only
+      // be possible after the raw html has been rendered. I think the strong bug issue is caused by materializecss messing
+      // with tinyMCE.
+      let boldText = document.body.getElementsByTagName("strong");
+      for (let text of boldText) {
+        text.style.fontWeight = "550";
+      }
+    });
 
     return {
       generalCreatedAt,
@@ -109,6 +132,7 @@ export default {
   padding-bottom: 6px;
   margin-bottom: 10px;
   padding-left: 10px;
+  padding-right: 10px;
 }
 
 .title-line {
@@ -125,7 +149,8 @@ export default {
 }
 
 .post-content-text {
-  padding-left: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   margin-top: 10px;
 }
 

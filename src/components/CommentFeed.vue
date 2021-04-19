@@ -108,7 +108,6 @@ export default {
       );
 
       if (response.value.status === "success") {
-        console.log(response.value);
         comments.value = [...comments.value, ...response.value.data.data];
         responseResults.value = response.value.results;
       }
@@ -117,7 +116,6 @@ export default {
     const deleteCommentResponse = ref(null);
     const deleteComment = async (commentIndex) => {
       let commentToDelete = comments.value[commentIndex];
-      console.log(commentToDelete);
       deleteCommentResponse.value = await FeedService.deleteComment(
         commentToDelete.id
       );
