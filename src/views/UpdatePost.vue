@@ -66,7 +66,7 @@
                     'preview paste importcss searchreplace autolink directionality visualblocks visualchars fullscreen image link media charmap hr insertdatetime advlist lists wordcount textpattern noneditable help charmap emoticons',
                   menubar: 'file edit view insert format tools help',
                   toolbar:
-                    'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen  preview | image media link | ltr rtl',
+                    'image media link | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap emoticons | fullscreen  preview | ltr rtl',
                   toolbar_sticky: true,
                   content_css: '//www.tiny.cloud/css/codepen.min.css',
                   toolbar_mode: 'sliding',
