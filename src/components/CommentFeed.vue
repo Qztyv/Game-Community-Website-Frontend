@@ -125,7 +125,10 @@ export default {
     };
 
     const handleScroll = async () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 10
+      ) {
         if (responseResults.value === 0 || isLoading.value) {
           return;
         }
