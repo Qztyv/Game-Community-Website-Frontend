@@ -319,4 +319,8 @@ a.router-link-exact-active {
 .chosen-feed-items {
   margin: 0px 10px 0px 0px;
 }
+
+form {
+  width: 60%;
+}
 </style>
