@@ -74,45 +74,45 @@ export default {
     let processingVote = false;
     let newVoteId = null;
     const response = ref(null);
-    const setVoteDirection = async (val, directionBeforeChange) => {
+    const setVoteDirection = async (newDirection, directionBeforeChange) => {
       if (!processingVote) {
         processingVote = true;
         if (!doesVoteAlreadyExist) {
           // logged in users who have never voted on this document before fall here. Also logged out users who try to create
           // a vote by liking or disliking will be sent here - they will fail authentication and be redirected to login
-          await createDocumentVote(val, directionBeforeChange);
+          await createDocumentVote(newDirection, directionBeforeChange);
         } else {
           // if a vote already exists on the document (matching user id and document id), users fall into here
-          await updateDocumentVote(val, directionBeforeChange);
+          await updateDocumentVote(newDirection, directionBeforeChange);
         }
         processingVote = false;
       }
     };
-    const createDocumentVote = async (val, directionBeforeChange) => {
+    const createDocumentVote = async (newDirection, directionBeforeChange) => {
       response.value = await FeedService.createDocumentVote(
         props.document.id,
         props.documentType,
         {
-          direction: val,
+          direction: newDirection,
         }
       );
       if (response.value.status === "success") {
         doesVoteAlreadyExist = true;
-        setCountersAndNewLikeId(val, directionBeforeChange, response);
+        setCountersAndNewLikeId(newDirection, directionBeforeChange, response);
       }
     };
 
-    const updateDocumentVote = async (val, directionBeforeChange) => {
+    const updateDocumentVote = async (newDirection, directionBeforeChange) => {
       let voteId = getVoteId();
       response.value = await FeedService.updateDocumentVote(
         voteId,
         props.documentType,
         {
-          direction: val,
+          direction: newDirection,
         }
       );
       if (response.value.status === "success") {
-        setCountersAndNewLikeId(val, directionBeforeChange, response);
+        setCountersAndNewLikeId(newDirection, directionBeforeChange, response);
       }
     };
 
