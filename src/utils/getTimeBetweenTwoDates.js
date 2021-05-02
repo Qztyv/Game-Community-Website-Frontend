@@ -12,7 +12,7 @@ const getGeneralTimeSinceCreation = (currentDate, dateOfPost) => {
   let months = Math.floor(durationSincePost.as("months"));
   let years = Math.floor(durationSincePost.as("years"));
 
-  if (minutes === 0) {
+  if (minutes === 0 || minutes === -1) {
     return `Just now`;
   } else if (hours === 0) {
     return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
